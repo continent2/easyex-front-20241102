@@ -1,0 +1,41 @@
+#Wrap footer {
+  line-height: 65px;
+  color: #fff;
+  background: #222;
+  text-transform: uppercase;
+  font-size: 14px;
+}
+
+@media (max-width: 1024px) {
+  #Wrap footer {
+    padding: 0 0;
+    line-height: 50px;
+    font-size: 10px;
+    margin-top: 40px;
+  }
+
+  #Wrap footer .f_sns img {
+    width: 30px;
+  }
+
+  #Wrap footer .f_sns {
+    position: relative;
+    right: inherit;
+    top: inherit;
+    padding-top: 25px;
+    text-align: center;
+  }
+
+  #Wrap footer .adr span {
+    display: block;
+  }
+
+  #Wrap footer .adr {
+    font-size: 12px;
+  }
+
+  #Wrap footer .f_logo img {
+    width: 50%;
+    max-width: 200px;
+  }
+}

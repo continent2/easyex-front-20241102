@@ -1,0 +1,288 @@
+@charset "utf-8";
+
+#Wrap header {
+  position: relative;
+  z-index: 9;
+  /* padding: 0 5%; */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  height: 80px;
+  background: #15a7a5;
+}
+
+#Wrap header .Gnb {
+  flex: 1;
+  text-align: center;
+  display: flex;
+  padding-left: 100px;
+  justify-content: space-between;
+}
+#Wrap header .Gnb .a_box {
+  display: inline-flex;
+  align-items: center;
+}
+#Wrap header .Gnb > ul {
+  flex: 1;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+#Wrap header .Gnb .a_box a {
+  color: #fff;
+  font-size: 14px;
+  display: inline-block;
+  text-transform: uppercase;
+  margin-left: 30px;
+}
+
+#Wrap header .link a {
+  display: block;
+  color: #fff;
+  border: 1px solid #fff;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 56px;
+  padding: 0 25px 0px 80px;
+  /* background: url(../../assets/img/common/ico_brch.png) no-repeat 25px center; */
+}
+
+#Wrap header .link a i {
+  display: inline-block;
+}
+
+#Wrap header .Gnb li {
+  padding-left: 30px;
+  display: inline-block;
+}
+
+#Wrap header .Gnb li a {
+  display: inline-block;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+#Wrap header .Gnb li:first-child a {
+  font-weight: 500;
+}
+
+#Wrap header h1 a {
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .m_nav_top {
+    background: #15a7a5;
+    padding: 25px;
+  }
+  .m_nav_top .a_box {
+    margin-top: 25px;
+  }
+  .m_nav_top .a_box a {
+    color: #777;
+    display: inline-block;
+    background: #fff;
+    border-radius: 50px;
+    width: 70px;
+    text-align: center;
+    line-height: 30px;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-right: 10px;
+  }
+  .m_nav_top .txt_box {
+    color: #fff;
+    font-size: 15px;
+  }
+  #Wrap .container .inner {
+    width: 100%;
+  }
+  .result_box .money_inp {
+    margin-bottom: 30px;
+  }
+
+  #Wrap header.fixed {
+    position: fixed;
+  }
+  #Wrap header {
+    height: 60px;
+    background: #15a7a5;
+    top: 0;
+    padding: 0;
+  }
+
+  #Wrap header .Gnb {
+    display: none;
+  }
+
+  #Wrap header h1 a img {
+    height: 27px;
+  }
+
+  #Wrap .nav_open {
+    display: block;
+    position: absolute;
+    top: 21px;
+    right: 5%;
+  }
+
+  #Wrap .nav_open a {
+    font-size: 25px;
+    display: flex;
+    line-height: 30px;
+    color: #666;
+    text-align: right;
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  #Wrap .nav_open.on a {
+    display: block;
+    height: 30px;
+  }
+  #Wrap .nav_open.on {
+    top: 27px;
+  }
+
+  #Wrap .nav_open.on span:nth-child(1) {
+  }
+
+  #Wrap .nav_open.on span:nth-child(2) {
+    display: none;
+  }
+
+  #Wrap .nav_open span {
+    display: block;
+    width: 25px;
+    height: 2px;
+    background: #fff;
+    margin-bottom: 6px;
+  }
+
+  #Wrap .nav_open span:nth-child(2) {
+    width: 18px;
+    transition: 0.3s linear;
+  }
+
+  #Wrap .nav_open:hover a span {
+    width: 25px;
+    transition: 0.3s linear;
+  }
+
+  #Wrap .nav_open.on span:nth-of-type(3) {
+    -webkit-transform: translateY(0) rotate(45deg);
+    transform: translateY(0) rotate(45deg);
+  }
+
+  #Wrap .nav_open.on span:nth-of-type(1) {
+    -webkit-transform: translateY(8px) rotate(-45deg);
+    transform: translateY(8px) rotate(-45deg);
+  }
+
+  #Wrap .nav_open.on span:nth-of-type(3) {
+    bottom: 14px;
+    position: absolute;
+  }
+
+  /* mobile menu */
+  #new_nav {
+    position: fixed;
+    background: #fff;
+    top: 0;
+    right: -105%;
+    width: 80%;
+    bottom: 0;
+    -webkit-transition: all 0.5s;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+    z-index: 999;
+  }
+
+  #new_nav.on {
+    right: 0;
+  }
+
+  #new_nav.on .close {
+    display: inline-block;
+    position: absolute;
+  }
+
+  #new_nav ul {
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-bottom: 50px;
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+
+  #new_nav ul li {
+    display: block;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+  }
+
+  #new_nav ul li a {
+    display: block;
+    font-size: 15px;
+    color: #222;
+    line-height: 40px;
+    padding: 0 20px;
+    text-align: left;
+    font-weight: 600;
+    width: 100%;
+  }
+
+  #new_nav .new_close {
+    /* background: url(../../assets/img/common/ico_close_w.png) no-repeat center
+      center; */
+    background-size: 50%;
+    text-indent: -99em;
+    cursor: pointer;
+    overflow: hidden;
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+
+  .new_nav_bg {
+    opacity: 0;
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+  }
+
+  .new_nav_bg {
+    opacity: 0;
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 100;
+  }
+
+  .new_nav_bg.on {
+    opacity: 1;
+    display: block;
+  }
+}
