@@ -13,22 +13,24 @@ import WithdrawPage from '@/pages/WithdrawPage';
 import AuthLayout from '@/components/layouts/AuthLayout';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
 
+import AuthRoute from '@/routes/AuthRoute';
+
 const router = createBrowserRouter([
   {
-    element: <DefaultLayout />,
+    element: <AuthRoute />,
     children: [
-      { path: '/', element: <HomePage /> },
-      { path: '/exchange-crypto', element: <ExchangeCryptoPage /> },
-      { path: '/exchange-fiat', element: <ExchangeFiatPage /> },
-      { path: '/deposit', element: <DepositPage /> },
-      { path: '/withdraw', element: <WithdrawPage /> },
-    ],
-  },
-  {
-    element: <DefaultLayout />,
-    children: [
-      { path: '/my/activity', element: <MyActivityPage /> },
-      { path: '/my/balances', element: <MyBalancesPage /> },
+      {
+        element: <DefaultLayout />,
+        children: [
+          { path: '/', element: <HomePage /> },
+          { path: '/exchange-crypto', element: <ExchangeCryptoPage /> },
+          { path: '/exchange-fiat', element: <ExchangeFiatPage /> },
+          { path: '/deposit', element: <DepositPage /> },
+          { path: '/withdraw', element: <WithdrawPage /> },
+          { path: '/my/activity', element: <MyActivityPage /> },
+          { path: '/my/balances', element: <MyBalancesPage /> },
+        ],
+      },
     ],
   },
   {

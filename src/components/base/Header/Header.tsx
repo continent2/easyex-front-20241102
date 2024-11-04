@@ -1,12 +1,32 @@
 import { useRef, useState } from 'react';
 import clsx from 'clsx';
 import useScrollPosition from '@react-hook/window-scroll';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import LogoImage from '@/assets/img/common/logo.png';
+
+import { logout } from '@/lib/api/auth';
+import { getUser } from '@/lib/api/user';
+import storage from '@/lib/storage';
 
 import './style.css';
 
 export default function Header() {
+  const { data: user } = useQuery({
+    queryKey: ['user'],
+    queryFn: getUser,
+    enabled: !!storage.getItem('token'),
+    select: (response: any) => response?.data?.payload?.myinfo,
+  });
+
+  const { mutate: logoutMutate } = useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      storage.removeItem('token');
+      window.location.href = '/login';
+    },
+  });
+
   const headerRef = useRef<HTMLElement>(null);
   const scrollY = useScrollPosition(60);
   const [isNavOpen, setIsNevOpen] = useState<boolean>(false);
@@ -18,12 +38,17 @@ export default function Header() {
     setIsNevOpen((prevState) => !prevState);
   };
 
+  const onLogout = () => {
+    logoutMutate();
+  };
+
   return (
     <>
       <div className="mobVer">
         <div id="new_nav" className={clsx('trans05', isNavOpen && 'on')}>
           <div className="m_nav_top">
-            <div className="txt_box">안녕하세요. 반갑습니다.</div>
+            {user && <div className="txt_box">Hello, {user.username}</div>}
+
             <div className="a_box">
               <a href="/login">Login</a>
               <a href="/join">join</a>
@@ -37,12 +62,6 @@ export default function Header() {
             </div>
           </div>
           <ul>
-            <li>
-              <a href="/exchange-crypto">Exchange Crypto</a>
-            </li>
-            <li>
-              <a href="/exchange-fiat">Exchange Fiat</a>
-            </li>
             <li>
               <a href="/deposit">Deposit</a>
             </li>
@@ -75,12 +94,6 @@ export default function Header() {
           <div className="Gnb pcVer">
             <ul>
               <li>
-                <a href="/exchange-crypto">Exchange Crypto</a>
-              </li>
-              <li>
-                <a href="/exchange-fiat">Exchange Fiat</a>
-              </li>
-              <li>
                 <a href="/deposit">Deposit</a>
               </li>
               <li>
@@ -94,7 +107,13 @@ export default function Header() {
               </li>
             </ul>
             <div className="a_box">
-              <a href="/login">Login</a>
+              {user ? (
+                <a className="cursor-pointer" onClick={onLogout}>
+                  logout
+                </a>
+              ) : (
+                <a href="/login">Login</a>
+              )}
               <a href="/join">join</a>
             </div>
           </div>

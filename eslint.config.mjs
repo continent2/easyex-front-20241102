@@ -40,6 +40,8 @@ export default [
       ],
       'simple-import-sort/exports': 'error',
       'no-console': ['error', { allow: ['warn', 'error'] }],
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
 ];
