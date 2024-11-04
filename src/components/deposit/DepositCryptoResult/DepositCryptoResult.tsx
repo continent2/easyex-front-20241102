@@ -1,6 +1,6 @@
 import QrImage from '@/assets/img/qr.png';
 
-export default function ExchangeFiatResult() {
+export default function DepositCryptoResult() {
   return (
     <div className="result_box ver_qr">
       <h3>

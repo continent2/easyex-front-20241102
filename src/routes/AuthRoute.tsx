@@ -1,4 +1,4 @@
-import { Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 
 import { getUser } from '@/lib/api/user';
@@ -6,7 +6,6 @@ import storage from '@/lib/storage';
 
 const AuthRoute = () => {
   const { pathname } = useLocation();
-  const navigation = useNavigate();
 
   const { data: user, isLoading: isLoadingUser } = useQuery({
     queryKey: ['user'],

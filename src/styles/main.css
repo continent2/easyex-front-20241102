@@ -161,13 +161,7 @@
   height: 28px;
   min-width: 45px;
 }
-.money_inp i.bank {
-  background: url(../assets/img/ico_sinhan.png) no-repeat left center;
-  background-size: 28px;
-  width: 45px;
-  height: 28px;
-  min-width: 45px;
-}
+
 .money_inp:after {
   content: '';
   display: block;

@@ -1,6 +1,6 @@
 import { RouterProvider } from 'react-router-dom';
 
-import Modal from '@/components/common/Modal/Modal';
+import Modal from '@/components/common/Modal';
 
 import router from '@/routes/router';
 

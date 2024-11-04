@@ -2,9 +2,9 @@ import * as React from 'react';
 import { Fade } from '@mui/material';
 import MuiModal from '@mui/material/Modal';
 
-import { useModalStore } from '@/store/useModalStore';
-
 import CloseIcon from '@/assets/img/icon-close.png';
+
+import { useModalStore } from '@/store/useModalStore';
 
 const Modal = () => {
   const open = useModalStore((state) => state.open);

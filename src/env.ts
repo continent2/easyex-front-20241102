@@ -14,6 +14,9 @@ const envSchema = z.object({
   appServerPort: z.number(),
   appServerUrl: z.string(),
   netType: z.string(),
+  // socialLoginRedirectUrl: z.string(),
+  // googleClientId: z.string(),
+  // googleSecret: z.string(),
 });
 
 export const env = envSchema.parse({
@@ -25,4 +28,7 @@ export const env = envSchema.parse({
   appServerPort: parseInt(process.env.REACT_APP_SERVER_PORT as string, 10),
   appServerUrl: process.env.REACT_APP_SERVER_URL,
   netType: process.env.REACT_APP_NET_TYPE,
+  // socialLoginRedirectUrl: process.env.REACT_APP_SOCIAL_LOGIN_REDIRECT_URL,
+  // googleClientId: process.env.REACT_APP_GOOGLE_CLIENT_ID,
+  // googleSecret: process.env.REACT_APP_GOOGLE_SECRET,
 });
