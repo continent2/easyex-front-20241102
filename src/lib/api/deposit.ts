@@ -68,15 +68,14 @@ export const depositCrypto = async (depositParams: {
   from: {
     typecf: string;
     symbol: string;
-    address: string;
-    amount: string;
+    address?: string;
+    amount?: string;
     txhash?: string;
   };
   to: {
     typecf: string;
     symbol: string;
     address: string;
-    amount: string;
   };
 }) => {
   return defaultAxios.post('/txs/deposit', depositParams);

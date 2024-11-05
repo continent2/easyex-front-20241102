@@ -5,12 +5,18 @@ import ImageSelect from '@/components/common/ImageSelect/ImageSelect';
 
 import ChangeImage from '@/assets/img/ico_change.png';
 
+import {
+  validateCrypto,
+  validateHex64Or66,
+  validatePositiveDecimal,
+} from '@/lib/validate';
 import { AdminCryptoAccount, Token } from '@/types/deposit';
 
 export type DepositCryptoFormValue = {
   activeCryptoIndex: number;
   fromAccount: string;
   fromAmount: string;
+  fromTxhash: string;
   activeAdminCryptoAccountIndex: number;
 };
 
@@ -37,6 +43,12 @@ export default function DepositCryptoForm({
     formState: { errors },
   } = useFormContext<DepositCryptoFormValue>();
 
+  const activeCryptoIndex = watch('activeCryptoIndex');
+  const activeCrypto = cryptos?.[activeCryptoIndex];
+  const activeAdminCryptoAccountIndex = watch('activeAdminCryptoAccountIndex');
+  const activeAdminCryptoAccount =
+    adminCryptoAccounts?.[activeAdminCryptoAccountIndex];
+
   return (
     <div className="cont_box_wrp">
       <form onSubmit={handleSubmit(onSubmitDepositCryptoForm)}>
@@ -59,13 +71,29 @@ export default function DepositCryptoForm({
                     value: index,
                   }))}
                   onChange={(_, index) => setValue('activeCryptoIndex', index)}
-                  value={watch('activeCryptoIndex')}
+                  value={activeCryptoIndex}
                 />
                 <textarea
                   className="inp_style"
                   style={{ height: '100%', resize: 'none' }}
+                  disabled={!!watch('fromTxhash')}
                   {...register('fromAccount', {
-                    required: 'Please Enter account',
+                    validate: (fromAccount) => {
+                      if (watch('fromTxhash')) {
+                        return true;
+                      }
+
+                      if (!fromAccount) return 'Please Enter account';
+
+                      if (!activeCrypto) {
+                        return false;
+                      }
+
+                      return (
+                        validateCrypto(fromAccount, activeCrypto?.symbol) ||
+                        'Invalid account'
+                      );
+                    },
                   })}
                 ></textarea>
               </div>
@@ -106,16 +134,12 @@ export default function DepositCryptoForm({
                   onChange={(_, index) =>
                     setValue('activeAdminCryptoAccountIndex', index)
                   }
-                  value={watch('activeAdminCryptoAccountIndex')}
+                  value={activeAdminCryptoAccountIndex}
                 />
                 <textarea
                   className="inp_style"
                   style={{ height: '100%', resize: 'none' }}
-                  value={
-                    adminCryptoAccounts?.[
-                      watch('activeAdminCryptoAccountIndex')
-                    ]?.address || ''
-                  }
+                  value={activeAdminCryptoAccount?.address || ''}
                   readOnly
                 ></textarea>
               </div>
@@ -135,21 +159,27 @@ export default function DepositCryptoForm({
                   value: index,
                 }))}
                 onChange={(_, index) => setValue('activeCryptoIndex', index)}
-                value={watch('activeCryptoIndex')}
+                value={activeCryptoIndex}
               />
               <input
                 type="text"
                 className="inp_style"
                 {...register('fromAmount', {
-                  required: 'Please Enter amount',
+                  validate: (fromAmount) => {
+                    if (watch('fromTxhash')) {
+                      return true;
+                    }
+                    if (!fromAmount) {
+                      return 'Please enter amount';
+                    }
+                    return (
+                      validatePositiveDecimal(fromAmount) || 'Invalid amount'
+                    );
+                  },
                 })}
+                disabled={!!watch('fromTxhash')}
               />
-              <span>
-                {
-                  adminCryptoAccounts?.[watch('activeAdminCryptoAccountIndex')]
-                    ?.symbol
-                }
-              </span>
+              <span>{activeCrypto?.symbol}</span>
             </div>
             <ErrorMessage
               errors={errors}
@@ -165,9 +195,55 @@ export default function DepositCryptoForm({
             />
           </div>
         </div>
-        <div className="mt-8 text-[#ff0000]">{depositPolicy}</div>
-        <div className="btn_box">
-          <button>Request</button>
+        <div className="cont_box flexBox area02 ver_noList m-column">
+          <div className="inp_tit">
+            <h3>txhash</h3>
+            <div className="money_inp">
+              <ImageSelect
+                options={cryptos?.map((cryptos, index) => ({
+                  img: cryptos.urllogo,
+                  label: cryptos.name,
+                  value: index,
+                }))}
+                onChange={(_, index) => setValue('activeCryptoIndex', index)}
+                value={activeCryptoIndex}
+              />
+              <input
+                type="text"
+                className="inp_style"
+                disabled={!!watch('fromAccount') || !!watch('fromAmount')}
+                {...register('fromTxhash', {
+                  validate: (fromTxhash) => {
+                    if (!!watch('fromAccount') || !!watch('fromAmount')) {
+                      return true;
+                    }
+                    if (!fromTxhash) return 'Please Enter txhash';
+                    return validateHex64Or66(fromTxhash) || 'Invalid txhash';
+                  },
+                })}
+              />
+            </div>
+            <ErrorMessage
+              errors={errors}
+              name="fromTxhash"
+              render={({ messages }) =>
+                messages &&
+                Object.entries(messages).map(([type, message]) => (
+                  <p className="red_alert" key={type}>
+                    {message}
+                  </p>
+                ))
+              }
+            />
+          </div>
+        </div>
+        <div className="cont_box flexBox area02 ver_noList m-column">
+          <div className="inp_tit">
+            <div className="mt-8 text-[#ff0000]">{depositPolicy}</div>
+            <div className="btn_box">
+              <button>Request</button>
+            </div>
+          </div>
         </div>
       </form>
     </div>
