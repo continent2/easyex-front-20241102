@@ -1,57 +1,30 @@
-import { useEffect, useState } from 'react';
 import { BsTrash } from 'react-icons/bs';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
-import { useMutation, useQuery } from '@tanstack/react-query';
 
 import useModal from '@/components/hooks/useModal';
 
 import copyImage from '@/assets/img/ico-copy.png';
 
 import { orderStatusClassNameMap, orderStatusMap } from '@/constants/order';
-import { deleteOrder, getOrders } from '@/lib/api/order';
 import { safeToLocaleString } from '@/lib/common';
 import { Order } from '@/types/order';
 
-export default function OrderList() {
-  const [offset, setOffset] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
-  const [limit] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+type Props = {
+  orders?: Order[];
+  currentPage: number;
+  totalPages: number;
+  onChangePage: (pageNumber: number) => void;
+  onDeleteOrder: (order: Order) => void;
+};
 
-  const { data: orderPageNation, refetch: refetchOrderPageNation } = useQuery({
-    queryKey: ['orders', offset, limit],
-    queryFn: () => getOrders({ offset, limit }),
-    select: (response) => {
-      return response.data as {
-        payload: {
-          count: number;
-        };
-        list: Order[];
-      };
-    },
-  });
-
-  useEffect(() => {
-    if (!orderPageNation) {
-      return;
-    }
-    setTotalCount(orderPageNation.payload.count);
-  }, [orderPageNation]);
-
-  useEffect(() => {
-    setOffset((currentPage - 1) * limit);
-  }, [currentPage, limit]);
-
-  const totalPages = Math.ceil(totalCount / limit);
-  const orders = orderPageNation?.list;
-
-  const onChangePage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
+export default function OrderList({
+  orders,
+  currentPage,
+  totalPages,
+  onChangePage,
+  onDeleteOrder,
+}: Props) {
   const { openModal } = useModal();
 
   const onCopyText = (text: string) => {
@@ -65,17 +38,6 @@ export default function OrderList() {
         });
       })
       .catch((err) => {});
-  };
-
-  const { mutate: deleteOrderMutate } = useMutation({
-    mutationFn: deleteOrder,
-    onSuccess: () => {
-      refetchOrderPageNation();
-    },
-  });
-
-  const onDeleteOrder = (uuid: string) => {
-    deleteOrderMutate(uuid);
   };
 
   return (
@@ -194,7 +156,7 @@ export default function OrderList() {
                     <td>
                       <BsTrash
                         className="cursor-pointer"
-                        onClick={() => onDeleteOrder(order.uuid)}
+                        onClick={() => onDeleteOrder(order)}
                       />
                     </td>
                   </tr>
