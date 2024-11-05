@@ -4,8 +4,8 @@ import AuthJoinPage from '@/pages/auth/AuthJoinPage';
 import AuthLoginPage from '@/pages/auth/AuthLoginPage';
 import DepositPage from '@/pages/DepositPage';
 import HomePage from '@/pages/HomePage';
-import MyActivityPage from '@/pages/my/MyActivityPage';
-import MyBalancesPage from '@/pages/my/MyBalancesPage';
+import ActivityPage from '@/pages/my/ActivityPage';
+import BalancesPage from '@/pages/my/BalancesPage';
 import WithdrawPage from '@/pages/WithdrawPage';
 
 import AuthLayout from '@/components/layouts/AuthLayout';
@@ -23,8 +23,8 @@ const router = createBrowserRouter([
           { path: '/', element: <HomePage /> },
           { path: '/deposit', element: <DepositPage /> },
           { path: '/withdraw', element: <WithdrawPage /> },
-          { path: '/my/activity', element: <MyActivityPage /> },
-          { path: '/my/balances', element: <MyBalancesPage /> },
+          { path: '/my/activity', element: <ActivityPage /> },
+          { path: '/my/balances', element: <BalancesPage /> },
         ],
       },
     ],
