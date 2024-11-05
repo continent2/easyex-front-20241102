@@ -10,7 +10,7 @@ import {
   validateHex64Or66,
   validatePositiveDecimal,
 } from '@/lib/validate';
-import { AdminCryptoAccount, Token } from '@/types/deposit';
+import { AdminCryptoAccount, Crypto } from '@/types/deposit';
 
 export type DepositCryptoFormValue = {
   activeCryptoIndex: number;
@@ -21,7 +21,7 @@ export type DepositCryptoFormValue = {
 };
 
 type Props = {
-  cryptos?: Token[];
+  cryptos?: Crypto[];
   adminCryptoAccounts?: AdminCryptoAccount[];
   depositPolicy?: string;
   onSubmitDepositCryptoForm: (

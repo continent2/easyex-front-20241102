@@ -22,7 +22,7 @@ import {
   AdminBankAccount as AdminBankAccount,
   AdminCryptoAccount,
   Bank,
-  Token,
+  Crypto,
 } from '@/types/deposit';
 
 export default function DepositPage() {
@@ -96,11 +96,12 @@ export default function DepositPage() {
         symbol: activeBank.primarycurrency,
       },
       to: {
+        typecf: 'F',
         account: activeAdminBank.number,
+        amount: depositFiatFormValue.fromAmount,
         bankcode: activeAdminBank.bankcode,
         bankname: activeAdminBank.bankname,
         symbol: activeAdminBank.symbol,
-        typecf: 'F',
       },
     });
   };
@@ -109,7 +110,7 @@ export default function DepositPage() {
   const { data: cryptos } = useQuery({
     queryKey: ['cryptos', 'C'],
     queryFn: () => getCryptos('C'),
-    select: (response: any) => response.data.list as Token[],
+    select: (response: any) => response.data.list as Crypto[],
     enabled: typecf === 'C',
   });
 
@@ -179,6 +180,7 @@ export default function DepositPage() {
           typecf: 'C',
           symbol: activeAdminCryptoAccount.symbol,
           address: activeAdminCryptoAccount.address,
+          amount: depositCryptoFormValue.fromAmount,
         },
       });
     }

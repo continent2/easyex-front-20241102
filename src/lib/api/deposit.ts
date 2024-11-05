@@ -42,6 +42,7 @@ export const depositFiat = async (depositParams: {
     bankname: string;
     bankcode: string;
     account: string;
+    amount: string;
   };
 }) => {
   return defaultAxios.post('/txs/deposit', depositParams);
@@ -76,6 +77,7 @@ export const depositCrypto = async (depositParams: {
     typecf: string;
     symbol: string;
     address: string;
+    amount?: string;
   };
 }) => {
   return defaultAxios.post('/txs/deposit', depositParams);

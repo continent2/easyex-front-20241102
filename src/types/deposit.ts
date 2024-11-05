@@ -35,7 +35,7 @@ export interface AdminCryptoAccount {
   code: any;
 }
 
-export interface Token {
+export interface Crypto {
   id: number;
   createdat: string;
   updatedat: string;
