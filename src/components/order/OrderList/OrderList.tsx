@@ -108,7 +108,7 @@ export default function OrderList({
                           ? fromdata.symbol
                           : fromdata.bankname}
                       </p>
-                      <span className="sm-text">
+                      <span className="sm-text text-overflow">
                         {fromdata.typecf === 'C'
                           ? fromdata.address || `txhash: ${fromdata.txhash}`
                           : fromdata.account}
@@ -135,7 +135,7 @@ export default function OrderList({
                             ? todata.symbol
                             : todata.bankname}
                         </p>
-                        <span className="sm-text">
+                        <span className="sm-text text-overflow">
                           {todata.typecf === 'C'
                             ? todata.address
                             : todata.account}

@@ -1,17 +1,11 @@
 import { useEffect, useState } from 'react';
-import { BsTrash } from 'react-icons/bs';
-import clsx from 'clsx';
-import dayjs from 'dayjs';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import useModal from '@/components/hooks/useModal';
 import OrderList from '@/components/order/OrderList';
 
-import copyImage from '@/assets/img/ico-copy.png';
-
-import { orderStatusClassNameMap, orderStatusMap } from '@/constants/order';
+import { orderStatusMap } from '@/constants/order';
 import { deleteOrder, getOrders } from '@/lib/api/order';
-import { safeToLocaleString } from '@/lib/common';
 import { Order } from '@/types/order';
 
 export default function ActivityPage() {
