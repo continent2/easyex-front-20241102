@@ -1,0 +1,21 @@
+export type Account = {
+  id: number;
+  createdat: string;
+  updatedat: string;
+  username: any;
+  address: any;
+  privatekey: any;
+  nettype: string;
+  currentBlockNumber: number;
+  firstUsedBlockNumber: number;
+  useruuid: string;
+  active: number;
+  currency: string;
+  typecf: string;
+  symbol: string;
+  balancefloat: number;
+  balancestr: string;
+  convvalue: number;
+  convsymbol: string;
+  urllogo: string;
+};
