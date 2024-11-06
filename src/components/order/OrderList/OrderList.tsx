@@ -100,17 +100,19 @@ export default function OrderList({
 
                 return (
                   <tr key={order.id}>
-                    <td>{dayjs(order.createdat).format('YYYY-MM-DD')}</td>
-                    <td>{`${fromdata.typecf} to ${todata.typecf}`}</td>
-                    <td className="ta-l">
+                    <td className="w-28">
+                      {dayjs(order.createdat).format('YYYY-MM-DD')}
+                    </td>
+                    <td className="w-16">{`${fromdata.typecf} to ${todata.typecf}`}</td>
+                    <td className="w-64">
                       <p>
                         {fromdata.typecf === 'C'
                           ? fromdata.symbol
                           : fromdata.bankname}
                       </p>
-                      <span className="sm-text text-overflow">
+                      <span className="sm-text whitespace-normal break-all overflow-hidden">
                         {fromdata.typecf === 'C'
-                          ? fromdata.address || `txhash: ${fromdata.txhash}`
+                          ? fromdata.address || `(txhash)${fromdata.txhash}`
                           : fromdata.account}
                       </span>
                       <button
@@ -128,22 +130,20 @@ export default function OrderList({
                       </button>
                     </td>
                     <td>{safeToLocaleString(Number(fromdata.amount))}</td>
-                    <td>
-                      <div>
-                        <p>
-                          {todata.typecf === 'C'
-                            ? todata.symbol
-                            : todata.bankname}
-                        </p>
-                        <span className="sm-text text-overflow">
-                          {todata.typecf === 'C'
-                            ? todata.address
-                            : todata.account}
-                        </span>
-                      </div>
+                    <td className="w-64">
+                      <p>
+                        {todata.typecf === 'C'
+                          ? todata.symbol
+                          : todata.bankname}
+                      </p>
+                      <span className="sm-text whitespace-normal break-all overflow-hidden">
+                        {todata.typecf === 'C'
+                          ? todata.address
+                          : todata.account}
+                      </span>
                     </td>
                     <td>{safeToLocaleString(Number(todata.amount))}</td>
-                    <td>
+                    <td className="w-[112px]">
                       <span
                         className={clsx(
                           'status',
@@ -153,7 +153,7 @@ export default function OrderList({
                         {orderStatusMap[order.status]}
                       </span>
                     </td>
-                    <td>
+                    <td className="w-[112px]">
                       <BsTrash
                         className="cursor-pointer"
                         onClick={() => onDeleteOrder(order)}
