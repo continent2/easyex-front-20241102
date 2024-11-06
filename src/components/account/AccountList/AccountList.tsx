@@ -162,9 +162,11 @@ export default function AccountList({
                   </td>
                   <td className="half-half">
                     <div className="mx-auto cursor-pointer">
-                      <a href="/withdraw">
+                      <a
+                        href={`/withdraw?fromTypecf=${account.symbol === 'KRW' ? 'F' : 'C'}${account.symbol !== 'KRW' ? `&fromSymbol=${account.symbol}` : ''}`}
+                      >
                         <i
-                          className="rotate-180 inline-block w-[28px] h-[28px] bg-[length:28px] bg-no-repeat	 bg-[left_center]"
+                          className="rotate-180 inline-block w-[28px] h-[28px] bg-[length:28px] bg-no-repeat bg-[left_center]"
                           style={{
                             backgroundImage: `url('${ArrowLeftStartOnImage}')`,
                           }}

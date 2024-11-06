@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import CryptoFiatToggleGroup from '@/components/common/CryptoFiatToggleGroup';
@@ -44,7 +45,13 @@ export type WithDrawFormValue = {
 };
 
 export default function WithdrawPage() {
-  const [fromTypecf, setFromTypecf] = useState<'C' | 'F'>('C');
+  const [searchParams] = useSearchParams();
+  const fromTypecfParam = searchParams.get('fromTypecf');
+  const initFromTypecf =
+    fromTypecfParam === 'C' || fromTypecfParam === 'F' ? fromTypecfParam : 'C';
+  const fromSymbolParm = searchParams.get('fromSymbol');
+
+  const [fromTypecf, setFromTypecf] = useState<'C' | 'F'>(initFromTypecf);
   const [toTypecf, setToTypecf] = useState<'C' | 'F'>('C');
 
   const withDrawForm = useForm<WithDrawFormValue>({
@@ -78,6 +85,17 @@ export default function WithdrawPage() {
     select: (response) => response.data.list as Crypto[],
     enabled: fromTypecf === 'C' || toTypecf === 'C',
   });
+
+  useEffect(() => {
+    if (cryptos && fromSymbolParm) {
+      const activeCryptoIndex = cryptos.findIndex(
+        (crypto) => crypto.symbol === fromSymbolParm,
+      );
+      if (activeCryptoIndex !== -1) {
+        withDrawForm.setValue('from.activeCryptoIndex', activeCryptoIndex);
+      }
+    }
+  }, [cryptos]);
 
   const { data: adminBankAccounts } = useQuery({
     queryKey: ['adminBankAccounts', 'F'],
@@ -253,7 +271,7 @@ export default function WithdrawPage() {
         <div className="cont_box_wrp">
           <FormProvider {...withDrawForm}>
             <form onSubmit={handleSubmit(onSubmitWithdrawFrom)}>
-              <div className="cont_box flex gap-10">
+              <div className="cont_box flex gap-10 xl:flex-col">
                 <div>
                   <CryptoFiatToggleGroup
                     value={fromTypecf}
@@ -264,7 +282,10 @@ export default function WithdrawPage() {
                   )}
                   {fromTypecf === 'F' && <TransactionFromFiat banks={banks} />}
                 </div>
-                <img className="w-9 h-9 self-center" src={ChangeImage} />
+                <img
+                  className="w-9 h-9 self-center xl:hidden"
+                  src={ChangeImage}
+                />
                 <div>
                   <CryptoFiatToggleGroup
                     value={toTypecf}
