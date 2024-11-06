@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { ToggleButton, ToggleButtonGroup } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
@@ -26,26 +27,32 @@ import {
 } from '@/types/deposit';
 
 export default function DepositPage() {
-  const [typecf, setTypecf] = useState<'C' | 'F'>('C');
+  const [searchParams] = useSearchParams();
+  const typecfParm = searchParams.get('typecf');
+  const initTypecf =
+    typecfParm === 'C' || typecfParm === 'F' ? typecfParm : 'C';
+  const symbolParm = searchParams.get('symbol');
+
+  const [typecf, setTypecf] = useState<'C' | 'F'>(initTypecf);
 
   const { data: banks } = useQuery({
     queryKey: ['banks'],
     queryFn: getBanks,
-    select: (response: any) => response.data.list as Bank[],
+    select: (response) => response.data.list as Bank[],
     enabled: typecf === 'F',
   });
 
   const { data: adminBankAccounts } = useQuery({
     queryKey: ['adminBankAccounts', 'F'],
     queryFn: () => getAdminAccounts({ typecf: 'F' }),
-    select: (response: any) => response.data.list as AdminBankAccount[],
+    select: (response) => response.data.list as AdminBankAccount[],
     enabled: typecf === 'F',
   });
 
   const { data: depositPolicy } = useQuery({
     queryKey: ['depositPolicy', typecf],
     queryFn: () => getDepositPolicy(typecf),
-    select: (response: any) => response.data.policy as string,
+    select: (response) => response.data.policy as string,
   });
 
   const depositFiatForm = useForm<depositFiatFormValue>({
@@ -107,13 +114,6 @@ export default function DepositPage() {
   };
 
   // CRYPTO
-  const { data: cryptos } = useQuery({
-    queryKey: ['cryptos', 'C'],
-    queryFn: () => getCryptos('C'),
-    select: (response: any) => response.data.list as Crypto[],
-    enabled: typecf === 'C',
-  });
-
   const depositCryptoForm = useForm<depositCryptoFormValue>({
     criteriaMode: 'all',
     defaultValues: {
@@ -122,14 +122,37 @@ export default function DepositPage() {
     },
   });
 
-  const symbol = cryptos?.[depositCryptoForm.watch('activeCryptoIndex')].symbol;
+  const { data: cryptos } = useQuery({
+    queryKey: ['cryptos', 'C'],
+    queryFn: () => getCryptos('C'),
+    select: (response) => response.data.list as Crypto[],
+    enabled: typecf === 'C',
+  });
+
+  useEffect(() => {
+    if (cryptos && symbolParm) {
+      const activeCryptoIndex = cryptos.findIndex(
+        (crypto) => crypto.symbol === symbolParm,
+      );
+      if (activeCryptoIndex !== -1) {
+        depositCryptoForm.setValue('activeCryptoIndex', activeCryptoIndex);
+      }
+    }
+  }, [cryptos]);
+
+  const activeCryptoSymbol =
+    cryptos?.[depositCryptoForm.watch('activeCryptoIndex')].symbol;
 
   const { data: adminCryptoAccounts } = useQuery({
-    queryKey: ['adminCryptoAccounts', 'C', symbol],
+    queryKey: ['adminCryptoAccounts', 'C', activeCryptoSymbol],
     queryFn: () =>
-      getAdminAccounts({ typecf: 'C', symbol, nettype: env.netType }),
-    select: (response: any) => response.data.list as AdminCryptoAccount[],
-    enabled: typecf === 'C' && !!symbol,
+      getAdminAccounts({
+        typecf: 'C',
+        symbol: activeCryptoSymbol,
+        nettype: env.netType,
+      }),
+    select: (response) => response.data.list as AdminCryptoAccount[],
+    enabled: typecf === 'C' && !!activeCryptoSymbol,
   });
 
   useEffect(() => {

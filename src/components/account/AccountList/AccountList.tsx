@@ -141,14 +141,16 @@ export default function AccountList({
                     ></i>
                   </td>
                   <td className="text-right half">
-                    {safeToLocaleString(Number(account?.balancestr))}
+                    {safeToLocaleString(Number(account.balancestr))}
                   </td>
                   <td className="text-right half">
-                    {safeToLocaleString(Number(account?.convvalue))}
+                    {safeToLocaleString(Number(account.convvalue))}
                   </td>
                   <td className="half-half">
                     <div className="mx-auto cursor-pointer">
-                      <a href="/deposit">
+                      <a
+                        href={`/deposit?typecf=${account.symbol === 'KRW' ? 'F' : 'C'}${account.symbol !== 'KRW' ? `&symbol=${account.symbol}` : ''}`}
+                      >
                         <i
                           className="inline-block w-[28px] h-[28px] bg-[length:28px] bg-no-repeat	 bg-[left_center]"
                           style={{
