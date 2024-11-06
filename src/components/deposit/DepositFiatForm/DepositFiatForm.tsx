@@ -1,6 +1,8 @@
 import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
+import ImageSelect from '@/components/common/ImageSelect';
+
 import ChangeImage from '@/assets/img/ico_change.png';
 
 import { AdminBankAccount, Bank } from '@/types/deposit';
@@ -32,6 +34,12 @@ export default function DepositFiatForm({
     formState: { errors },
   } = useFormContext<DepositFiatFormValue>();
 
+  const activeBankIndex = watch('activeBankIndex');
+  const activeBank = banks?.[activeBankIndex];
+
+  const ActiveAdminBankAccountIndex = watch('activeAdminAccountIndex');
+  const activeAdminBankAccout = adminBankAccounts?.[activeBankIndex];
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmitDepositFiatForm)}>
@@ -45,28 +53,20 @@ export default function DepositFiatForm({
                 <h3>From</h3>
                 <div className="inp_txt">
                   <div className="money_inp">
-                    <i className="label">BANK</i>
-                    <i
-                      className="bank"
-                      style={{
-                        backgroundImage: `url('${banks?.[watch('activeBankIndex')]?.urllogo}')`,
-                        backgroundSize: 'contain',
-                        backgroundPosition: 'left center',
-                        backgroundRepeat: 'no-repeat',
-                        height: '45px',
-                      }}
-                    />
-                    <select
+                    <i className="label !min-w-0">BANK</i>
+                    <ImageSelect
+                      className="z-10"
+                      options={banks?.map((bank, index) => ({
+                        img: bank.urllogo,
+                        label: bank.banknameen,
+                        value: index,
+                      }))}
+                      value={activeBankIndex}
+                      isVisibleLabel={true}
                       {...register('activeBankIndex', {
                         valueAsNumber: true,
                       })}
-                    >
-                      {banks?.map((bank, index) => (
-                        <option key={bank.id} value={index}>
-                          {bank.banknameen}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
                   <div className="money_inp in_alert">
                     <i className="label">Account</i>
@@ -132,29 +132,23 @@ export default function DepositFiatForm({
               <div className="inp_tit">
                 <h3>TO</h3>
                 <div className="inp_txt">
-                  <div className="money_inp">
-                    <i className="label">BANK</i>
-                    <i
-                      className="bank"
-                      style={{
-                        backgroundImage: `url('${adminBankAccounts?.[watch('activeAdminAccountIndex')]?.urllogo}}')`,
-                        backgroundSize: 'contain',
-                        backgroundPosition: 'left center',
-                        backgroundRepeat: 'no-repeat',
-                        height: '45px',
-                      }}
-                    />
-                    <select
+                  <div className="money_inp ">
+                    <i className="label !min-w-0">BANK</i>
+                    <ImageSelect
+                      className="z-10"
+                      options={adminBankAccounts?.map(
+                        (adminAccount, index) => ({
+                          img: adminAccount.urllogo,
+                          label: adminAccount.bankname,
+                          value: index,
+                        }),
+                      )}
+                      value={ActiveAdminBankAccountIndex}
+                      isVisibleLabel={true}
                       {...register('activeAdminAccountIndex', {
                         valueAsNumber: true,
                       })}
-                    >
-                      {adminBankAccounts?.map((adminAccount, index) => (
-                        <option key={adminAccount.id} value={index}>
-                          {adminAccount.bankname}
-                        </option>
-                      ))}
-                    </select>
+                    />
                   </div>
                   <div className="money_inp in_alert">
                     <i className="label">Account</i>

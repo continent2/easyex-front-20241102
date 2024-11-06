@@ -59,7 +59,7 @@ export default function DepositCryptoForm({
           <div className="relative inp_tit" style={{ width: '40%' }}>
             <h3>From</h3>
             <div className="cont_box">
-              <h3>보내시는 계좌 </h3>
+              <h3>Account</h3>
               <div
                 className="money_inp ver_textarea !px-[20px]"
                 style={{ width: '100%' }}
@@ -70,7 +70,11 @@ export default function DepositCryptoForm({
                     label: crypto.symbol,
                     value: index,
                   }))}
-                  onChange={(_, index) => setValue('activeCryptoIndex', index)}
+                  isVisibleLabel={false}
+                  className="z-10"
+                  onChange={(e) =>
+                    setValue('activeCryptoIndex', e.target.value as number)
+                  }
                   value={activeCryptoIndex}
                 />
                 <textarea
@@ -118,7 +122,7 @@ export default function DepositCryptoForm({
           <div className="inp_tit" style={{ width: '40%' }}>
             <h3>TO</h3>
             <div className="cont_box">
-              <h3>받으시는 계좌 </h3>
+              <h3>Account</h3>
               <div
                 className="money_inp ver_textarea !px-[20px]"
                 style={{ width: '100%' }}
@@ -131,8 +135,13 @@ export default function DepositCryptoForm({
                       value: index,
                     }),
                   )}
-                  onChange={(_, index) =>
-                    setValue('activeAdminCryptoAccountIndex', index)
+                  isVisibleLabel={false}
+                  className="z-10"
+                  onChange={(e) =>
+                    setValue(
+                      'activeAdminCryptoAccountIndex',
+                      e.target.value as number,
+                    )
                   }
                   value={activeAdminCryptoAccountIndex}
                 />
@@ -143,14 +152,13 @@ export default function DepositCryptoForm({
                   readOnly
                 ></textarea>
               </div>
-              {/* <p className="red_alert">유효하지 않은 주소입니다.</p> */}
             </div>
           </div>
         </div>
 
         <div className="cont_box flexBox area02 ver_noList m-column">
           <div className="inp_tit">
-            <h3>금액</h3>
+            <h3>Amount</h3>
             <div className="money_inp">
               <ImageSelect
                 options={cryptos?.map((cryptos, index) => ({
@@ -158,7 +166,11 @@ export default function DepositCryptoForm({
                   label: cryptos.name,
                   value: index,
                 }))}
-                onChange={(_, index) => setValue('activeCryptoIndex', index)}
+                isVisibleLabel={false}
+                className="z-10"
+                onChange={(e) =>
+                  setValue('activeCryptoIndex', e.target.value as number)
+                }
                 value={activeCryptoIndex}
               />
               <input
@@ -205,7 +217,11 @@ export default function DepositCryptoForm({
                   label: cryptos.name,
                   value: index,
                 }))}
-                onChange={(_, index) => setValue('activeCryptoIndex', index)}
+                isVisibleLabel={false}
+                className="z-10"
+                onChange={(e) =>
+                  setValue('activeCryptoIndex', e.target.value as number)
+                }
                 value={activeCryptoIndex}
               />
               <input

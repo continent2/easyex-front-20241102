@@ -13,15 +13,6 @@
   padding-bottom: 100px;
 }
 
-.text-overflow {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-break: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 10;
-  -webkit-box-orient: vertical;
-}
-
 /* login */
 
 .container .login-cont-box-wrap {

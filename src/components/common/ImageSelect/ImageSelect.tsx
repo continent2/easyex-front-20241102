@@ -1,39 +1,27 @@
-import React from 'react';
+import { forwardRef } from 'react';
 import {
-  Box,
   ListItemIcon,
   ListItemText,
   MenuItem,
   Select,
-  SelectChangeEvent,
+  SelectProps,
 } from '@mui/material';
 
-interface CoinAndCashSelectorProps {
+type Props = {
   options?: { value: any; label: string; img: string }[];
-  readOnly?: boolean;
-  disabled?: boolean;
-  value: any;
-  onChange: (event: SelectChangeEvent<string>, value: any) => void;
-}
+  isVisibleLabel: boolean;
+} & SelectProps;
 
-const ImageSelect: React.FC<CoinAndCashSelectorProps> = ({
-  options,
-  readOnly,
-  disabled,
-  value,
-  onChange,
-}) => {
-  return (
-    <Box>
+const ImageSelect = forwardRef<SelectProps, Props>(
+  ({ isVisibleLabel, options, ...props }, ref) => {
+    return (
       <Select
-        className="z-10"
-        readOnly={readOnly}
-        disabled={disabled}
-        value={value}
+        ref={ref}
         sx={{
           padding: 0,
-          width: '75px',
-          color: 'white',
+          '.MuiSelect-select': {
+            whiteSpace: 'normal !important',
+          },
           '.MuiOutlinedInput-notchedOutline': {
             borderColor: 'rgba(228, 219, 233, 0)',
           },
@@ -47,14 +35,19 @@ const ImageSelect: React.FC<CoinAndCashSelectorProps> = ({
         renderValue={(value) => {
           const data = options?.find((item) => item.value === value);
           return (
-            <ListItemIcon>
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                gap: 1,
+                alignItems: 'center',
+              }}
+            >
               <img src={data?.img} height={'25px'} alt={data?.label} />
+              {isVisibleLabel && data?.label}
             </ListItemIcon>
           );
         }}
-        onChange={(e) => {
-          onChange(e, e.target.value);
-        }}
+        {...props}
       >
         {options?.map((item) => (
           <MenuItem
@@ -80,8 +73,10 @@ const ImageSelect: React.FC<CoinAndCashSelectorProps> = ({
           </MenuItem>
         ))}
       </Select>
-    </Box>
-  );
-};
+    );
+  },
+);
+
+ImageSelect.displayName = 'ImageSelect';
 
 export default ImageSelect;
