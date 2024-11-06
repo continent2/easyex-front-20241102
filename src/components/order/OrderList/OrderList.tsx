@@ -2,12 +2,11 @@ import { BsTrash } from 'react-icons/bs';
 import clsx from 'clsx';
 import dayjs from 'dayjs';
 
-import useModal from '@/components/hooks/useModal';
-
 import copyImage from '@/assets/img/ico-copy.png';
 
 import { orderStatusClassNameMap, orderStatusMap } from '@/constants/order';
 import { safeToLocaleString } from '@/lib/common';
+import useModal from '@/lib/hooks/useModal';
 import { Order } from '@/types/order';
 
 type Props = {

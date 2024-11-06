@@ -1,29 +1,29 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { useParams, useSearchParams } from 'react-router-dom';
-import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
+import CryptoFiatToggleGroup from '@/components/common/CryptoFiatToggleGroup';
 import DepositCryptoForm from '@/components/deposit/DepositCryptoForm';
 import { DepositCryptoFormValue as depositCryptoFormValue } from '@/components/deposit/DepositCryptoForm/DepositCryptoForm';
 import DepositFiatForm from '@/components/deposit/DepositFiatForm';
 import { DepositFiatFormValue as depositFiatFormValue } from '@/components/deposit/DepositFiatForm/DepositFiatForm';
-import useModal from '@/components/hooks/useModal';
 
 import { env } from '@/env';
+import { getAdminAccounts } from '@/lib/api/account';
+import { getBanks } from '@/lib/api/bank';
+import { getCryptos } from '@/lib/api/crypto';
 import {
   depositCrypto,
   depositFiat,
-  getAdminAccounts,
-  getBanks,
-  getCryptos,
   getDepositPolicy,
 } from '@/lib/api/deposit';
+import useModal from '@/lib/hooks/useModal';
+import { Bank } from '@/types/bank';
+import { Crypto } from '@/types/crypto';
 import {
   AdminBankAccount as AdminBankAccount,
   AdminCryptoAccount,
-  Bank,
-  Crypto,
 } from '@/types/deposit';
 
 export default function DepositPage() {
@@ -228,42 +228,10 @@ export default function DepositPage() {
   return (
     <>
       <h2>Deposit</h2>
-      <ToggleButtonGroup
-        color="primary"
+      <CryptoFiatToggleGroup
         value={typecf}
-        exclusive
-        className="mb-3"
-        onChange={(_, value) => setTypecf(value)}
-      >
-        <ToggleButton
-          sx={{
-            '&.Mui-selected': {
-              color: '#15a7a5',
-              bgcolor: 'rgba(21, 167, 165, 0.08)',
-            },
-            '&.Mui-selected:hover': {
-              bgcolor: 'rgba(21, 167, 165, 0.12)',
-            },
-          }}
-          value="C"
-        >
-          CRYPTO
-        </ToggleButton>
-        <ToggleButton
-          sx={{
-            '&.Mui-selected': {
-              color: '#15a7a5',
-              bgcolor: 'rgba(21, 167, 165, 0.08)',
-            },
-            '&.Mui-selected:hover': {
-              bgcolor: 'rgba(21, 167, 165, 0.12)',
-            },
-          }}
-          value="F"
-        >
-          FIAT
-        </ToggleButton>
-      </ToggleButtonGroup>
+        onChange={(_, typecf) => setTypecf(typecf)}
+      />
       {typecf === 'C' && (
         <FormProvider {...depositCryptoForm}>
           <div className="flexBox area02 ver_noList m-column">

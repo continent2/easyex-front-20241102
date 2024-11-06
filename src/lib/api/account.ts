@@ -1,5 +1,6 @@
 import { defaultAxios } from '@/lib/api/apiClient';
 
+// 유저 계좌 전체 조회
 export const getAccounts = async ({
   offset,
   limit,
@@ -24,4 +25,23 @@ export const getAccounts = async ({
       },
     },
   );
+};
+
+// 관리자 계좌 전체 조회
+export const getAdminAccounts = async ({
+  typecf,
+  symbol,
+  nettype,
+}: {
+  typecf: 'F' | 'C';
+  symbol?: string;
+  nettype?: string;
+}) => {
+  return defaultAxios.get('/queries/rows/adminaccounts/active/1', {
+    params: {
+      typecf,
+      symbol,
+      nettype,
+    },
+  });
 };

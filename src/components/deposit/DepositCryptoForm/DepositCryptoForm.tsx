@@ -10,7 +10,8 @@ import {
   validateHex64Or66,
   validatePositiveDecimal,
 } from '@/lib/validate';
-import { AdminCryptoAccount, Crypto } from '@/types/deposit';
+import { Crypto } from '@/types/crypto';
+import { AdminCryptoAccount } from '@/types/deposit';
 
 export type DepositCryptoFormValue = {
   activeCryptoIndex: number;
@@ -155,7 +156,6 @@ export default function DepositCryptoForm({
             </div>
           </div>
         </div>
-
         <div className="cont_box flexBox area02 ver_noList m-column">
           <div className="inp_tit">
             <h3>Amount</h3>

@@ -33,7 +33,7 @@ const ImageSelect = forwardRef<SelectProps, Props>(
           },
         }}
         renderValue={(value) => {
-          const data = options?.find((item) => item.value === value);
+          const data = options?.find((option) => option.value === value);
           return (
             <ListItemIcon
               sx={{

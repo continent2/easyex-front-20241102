@@ -5,7 +5,8 @@ import ImageSelect from '@/components/common/ImageSelect';
 
 import ChangeImage from '@/assets/img/ico_change.png';
 
-import { AdminBankAccount, Bank } from '@/types/deposit';
+import { Bank } from '@/types/bank';
+import { AdminBankAccount } from '@/types/deposit';
 
 export type DepositFiatFormValue = {
   activeBankIndex: number;
