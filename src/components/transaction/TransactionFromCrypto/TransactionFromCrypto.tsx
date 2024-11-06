@@ -27,11 +27,15 @@ export default function TransactionFromCrypto({ cryptos }: Props) {
   const activeCrypto = cryptos?.[activeCryptoIndex];
 
   return (
-    <div className="inp_tit">
-      <h3>From</h3>
+    <div>
+      <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
+        From
+      </h3>
       <div className="cont_box relative">
-        <div className="inp_tit">
-          <h3>Account</h3>
+        <div>
+          <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
+            Account
+          </h3>
           <div className="money_inp ver_textarea ">
             {cryptos && (
               <ImageSelect
@@ -76,7 +80,10 @@ export default function TransactionFromCrypto({ cryptos }: Props) {
             render={({ messages }) =>
               messages &&
               Object.entries(messages).map(([type, message]) => (
-                <p className="red_alert" key={type}>
+                <p
+                  className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px]"
+                  key={type}
+                >
                   {message}
                 </p>
               ))
@@ -85,8 +92,10 @@ export default function TransactionFromCrypto({ cryptos }: Props) {
         </div>
       </div>
       <div className="cont_box">
-        <div className="inp_tit">
-          <h3>Amount</h3>
+        <div>
+          <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
+            Amount
+          </h3>
           <div className="money_inp">
             {cryptos && (
               <ImageSelect
@@ -128,7 +137,10 @@ export default function TransactionFromCrypto({ cryptos }: Props) {
             render={({ messages }) =>
               messages &&
               Object.entries(messages).map(([type, message]) => (
-                <p className="red_alert" key={type}>
+                <p
+                  className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px]"
+                  key={type}
+                >
                   {message}
                 </p>
               ))
@@ -137,8 +149,10 @@ export default function TransactionFromCrypto({ cryptos }: Props) {
         </div>
       </div>
       <div className="cont_box">
-        <div className="inp_tit">
-          <h3>txhash</h3>
+        <div>
+          <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
+            txhash
+          </h3>
           <div className="money_inp">
             {cryptos && (
               <ImageSelect
@@ -179,7 +193,10 @@ export default function TransactionFromCrypto({ cryptos }: Props) {
             render={({ messages }) =>
               messages &&
               Object.entries(messages).map(([type, message]) => (
-                <p className="red_alert" key={type}>
+                <p
+                  className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px]"
+                  key={type}
+                >
                   {message}
                 </p>
               ))

@@ -24,10 +24,14 @@ export default function TransactionToCrypto({ adminCryptoAccounts }: Props) {
     adminCryptoAccounts?.[activeAdminCryptoAccountIndex];
 
   return (
-    <div className="inp_tit" style={{ width: '40%' }}>
-      <h3>TO</h3>
+    <div>
+      <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
+        TO
+      </h3>
       <div className="cont_box">
-        <h3>Account</h3>
+        <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
+          Account
+        </h3>
         <div className="money_inp ver_textarea !px-[20px]">
           {adminCryptoAccounts && (
             <ImageSelect
@@ -53,9 +57,11 @@ export default function TransactionToCrypto({ adminCryptoAccounts }: Props) {
         </div>
       </div>
       <div className="cont_box">
-        <div className="inp_tit">
-          <h3>Amount</h3>
-          <div className="money_inp">
+        <div className="">
+          <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
+            Amount
+          </h3>
+          <div className="money_inp  ">
             {adminCryptoAccounts && (
               <ImageSelect
                 options={adminCryptoAccounts?.map(

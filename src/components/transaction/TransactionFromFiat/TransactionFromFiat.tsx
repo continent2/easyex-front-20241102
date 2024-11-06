@@ -18,11 +18,13 @@ export default function TransactionFromFiat({ banks }: Props) {
   } = useFormContext<WithDrawFormValue>();
 
   return (
-    <div className="inp_tit">
-      <h3>From</h3>
-      <div className="inp_txt">
+    <div>
+      <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
+        From
+      </h3>
+      <div className="flex flex-col gap-2">
         <div className="money_inp">
-          <i className="label !min-w-0">BANK</i>
+          <i className="label ">BANK</i>
           {banks && (
             <ImageSelect
               defaultValue={0}
@@ -56,7 +58,10 @@ export default function TransactionFromFiat({ banks }: Props) {
             render={({ messages }) =>
               messages &&
               Object.entries(messages).map(([type, message]) => (
-                <p className="red_alert" key={type}>
+                <p
+                  className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px]"
+                  key={type}
+                >
                   {message}
                 </p>
               ))
@@ -83,7 +88,10 @@ export default function TransactionFromFiat({ banks }: Props) {
             render={({ messages }) =>
               messages &&
               Object.entries(messages).map(([type, message]) => (
-                <p className="red_alert" key={type}>
+                <p
+                  className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px]"
+                  key={type}
+                >
                   {message}
                 </p>
               ))
