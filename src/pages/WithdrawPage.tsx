@@ -189,40 +189,97 @@ export default function WithdrawPage() {
     const activeAdminBank =
       adminBankAccounts?.[withDrawFormValue.to.activeAdminBankAccountIndex];
 
+    // C TO C
     if (toTypecf === 'C' && fromTypecf === 'C') {
-      withdrawMutate({
-        from: {
-          typecf: 'C',
-          symbol: activeCrypto?.symbol,
-          address: withDrawFormValue.from.cryptoAccount,
-          amount: withDrawFormValue.from.cryptoAmount,
-        },
-        to: {
-          typecf: 'C',
-          symbol: activeAdminCryptoAccount?.symbol,
-          address: activeAdminCryptoAccount?.address,
-          amount: withDrawFormValue.to.cryptoAmount,
-        },
-        quotesignature: exChangeRate?.quotesignature,
-      });
+      // account
+      if (
+        withDrawFormValue.from.cryptoAccount &&
+        withDrawFormValue.from.cryptoAmount
+      ) {
+        withdrawMutate({
+          from: {
+            typecf: 'C',
+            symbol: activeCrypto?.symbol,
+            address: withDrawFormValue.from.cryptoAccount,
+            amount: withDrawFormValue.from.cryptoAmount,
+          },
+          to: {
+            typecf: 'C',
+            symbol: activeAdminCryptoAccount?.symbol,
+            address: activeAdminCryptoAccount?.address,
+            amount: withDrawFormValue.to.cryptoAmount,
+          },
+          quotesignature: exChangeRate?.quotesignature,
+        });
+        return;
+      }
+
+      // txhash
+      if (withDrawFormValue.from.txhash) {
+        withdrawMutate({
+          from: {
+            typecf: 'C',
+            symbol: activeCrypto?.symbol,
+            txhash: withDrawFormValue.from.txhash,
+          },
+          to: {
+            typecf: 'C',
+            symbol: activeAdminCryptoAccount?.symbol,
+            address: activeAdminCryptoAccount?.address,
+            amount: withDrawFormValue.to.cryptoAmount,
+          },
+          quotesignature: exChangeRate?.quotesignature,
+        });
+      }
+
+      // C TO F
     } else if (toTypecf === 'C' && fromTypecf === 'F') {
-      withdrawMutate({
-        from: {
-          typecf: 'C',
-          symbol: activeCrypto?.symbol,
-          address: withDrawFormValue.from.cryptoAccount,
-          amount: withDrawFormValue.from.cryptoAmount,
-        },
-        to: {
-          typecf: 'F',
-          account: activeAdminBank?.number,
-          amount: withDrawFormValue.to.bankAmount,
-          bankcode: activeAdminBank?.bankcode,
-          bankname: activeAdminBank?.bankname,
-          symbol: 'KRW',
-        },
-        quotesignature: exChangeRate?.quotesignature,
-      });
+      // account
+      if (
+        withDrawFormValue.from.cryptoAccount &&
+        withDrawFormValue.from.cryptoAmount
+      ) {
+        withdrawMutate({
+          from: {
+            typecf: 'C',
+            symbol: activeCrypto?.symbol,
+            address: withDrawFormValue.from.cryptoAccount,
+            amount: withDrawFormValue.from.cryptoAmount,
+          },
+          to: {
+            typecf: 'F',
+            account: activeAdminBank?.number,
+            amount: withDrawFormValue.to.bankAmount,
+            bankcode: activeAdminBank?.bankcode,
+            bankname: activeAdminBank?.bankname,
+            symbol: 'KRW',
+          },
+          quotesignature: exChangeRate?.quotesignature,
+        });
+        return;
+      }
+
+      // txhash
+      if (withDrawFormValue.from.txhash) {
+        withdrawMutate({
+          from: {
+            typecf: 'C',
+            symbol: activeCrypto?.symbol,
+            txhash: withDrawFormValue.from.txhash,
+          },
+          to: {
+            typecf: 'F',
+            account: activeAdminBank?.number,
+            amount: withDrawFormValue.to.bankAmount,
+            bankcode: activeAdminBank?.bankcode,
+            bankname: activeAdminBank?.bankname,
+            symbol: 'KRW',
+          },
+          quotesignature: exChangeRate?.quotesignature,
+        });
+      }
+
+      // F TO F
     } else if (toTypecf === 'F' && fromTypecf === 'F') {
       withdrawMutate({
         from: {
@@ -243,6 +300,7 @@ export default function WithdrawPage() {
         },
         quotesignature: exChangeRate?.quotesignature,
       });
+      // F TO C
     } else if (toTypecf === 'F' && fromTypecf === 'C') {
       withdrawMutate({
         from: {
