@@ -130,23 +130,42 @@ export default function OrderList({
                           : fromdata.bankname}
                       </p>
                       <span className="sm-text whitespace-normal break-all overflow-hidden">
-                        {fromdata.typecf === 'C'
-                          ? fromdata.address || `(txhash)${fromdata.txhash}`
-                          : fromdata.account}
+                        {fromdata.typecf === 'C' && fromdata.address
+                          ? fromdata.address
+                          : ''}
+                        {fromdata.typecf === 'C' && fromdata.txhash
+                          ? `(txhash)${fromdata.txhash}`
+                          : ''}
+                        {fromdata.typecf === 'F' && fromdata.account
+                          ? fromdata.account
+                          : ''}
                       </span>
-                      <button
-                        className="copy-btn"
-                        onClick={() =>
-                          onCopyText(
-                            fromdata.typecf === 'C'
-                              ? fromdata.address
-                              : fromdata.account,
-                          )
-                        }
-                        type="button"
-                      >
-                        <img src={copyImage} alt="Copy" />
-                      </button>
+                      {(fromdata.address ||
+                        fromdata.txhash ||
+                        fromdata.account) && (
+                        <button
+                          className="copy-btn"
+                          onClick={() => {
+                            let copyText = '';
+
+                            if (fromdata.typecf === 'C' && fromdata.address) {
+                              copyText = fromdata.address;
+                            }
+                            if (fromdata.typecf === 'C' && fromdata.txhash) {
+                              copyText = fromdata.txhash;
+                            }
+
+                            if (fromdata.typecf === 'F' && fromdata.account) {
+                              copyText = fromdata.account;
+                            }
+
+                            onCopyText(copyText);
+                          }}
+                          type="button"
+                        >
+                          <img src={copyImage} alt="Copy" />
+                        </button>
+                      )}
                     </td>
                     <td>{safeToLocaleString(Number(fromdata.amount))}</td>
                     <td className="w-64">
