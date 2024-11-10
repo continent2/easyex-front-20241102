@@ -36,7 +36,27 @@ export default function OrderList({
           isVisibleOkBtn: true,
         });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        try {
+          const textArea = document.createElement('textarea');
+          document.body.appendChild(textArea);
+          textArea.value = text;
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          openModal({
+            title: 'Success',
+            content: 'Copied to clipboard.',
+            isVisibleOkBtn: true,
+          });
+        } catch (err) {
+          openModal({
+            title: 'Copy Fail',
+            content: `${err}`,
+            isVisibleOkBtn: true,
+          });
+        }
+      });
   };
 
   return (

@@ -120,7 +120,7 @@ export default function DepositCryptoForm({
             <img src={ChangeImage} alt="" />
           </span>
 
-          <div className="inp_tit" style={{ width: '40%' }}>
+          <div className="inp_tit lg:hidden" style={{ width: '40%' }}>
             <h3>TO</h3>
             <div className="cont_box">
               <h3>Account</h3>
@@ -253,11 +253,50 @@ export default function DepositCryptoForm({
             />
           </div>
         </div>
+        <div className="cont_box flexBox area02 ver_noList m-column mt-3 !hidden lg:!block">
+          <div className="inp_tit" style={{ width: '40%' }}>
+            <h3>TO</h3>
+            <div className="cont_box">
+              <h3>Account</h3>
+              <div
+                className="money_inp ver_textarea !px-[20px]"
+                style={{ width: '100%' }}
+              >
+                <ImageSelect
+                  options={adminCryptoAccounts?.map(
+                    (adminCryptoAccount, index) => ({
+                      img: adminCryptoAccount.urllogo,
+                      label: adminCryptoAccount.symbol,
+                      value: index,
+                    }),
+                  )}
+                  isVisibleLabel={false}
+                  className="z-10"
+                  onChange={(e) =>
+                    setValue(
+                      'activeAdminCryptoAccountIndex',
+                      e.target.value as number,
+                    )
+                  }
+                  value={activeAdminCryptoAccountIndex}
+                />
+                <textarea
+                  className="inp_style"
+                  style={{ height: '100%', resize: 'none' }}
+                  value={activeAdminCryptoAccount?.address || ''}
+                  readOnly
+                ></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="cont_box flexBox area02 ver_noList m-column">
-          <div className="inp_tit">
-            <div className="mt-8 text-[#ff0000]">{depositPolicy}</div>
+          <div className="inp_tit !w-full">
             <div className="btn_box">
               <button>Request</button>
+            </div>
+            <div className="mt-8 text-black text-center">
+              &quot;*{depositPolicy}*&quot;
             </div>
           </div>
         </div>

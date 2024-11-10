@@ -360,10 +360,12 @@ export default function WithdrawPage() {
                 </div>
               </div>
               <div className="cont_box flexBox area02 ver_noList m-column">
-                <div className="inp_tit">
-                  <div className="mt-8 text-[#ff0000]">{withDrawPolicy}</div>
+                <div className="inp_tit !w-full">
                   <div className="btn_box">
                     <button>Request</button>
+                  </div>
+                  <div className="mt-8 text-black text-center">
+                    &quot;*{withDrawPolicy}*&quot;
                   </div>
                 </div>
               </div>

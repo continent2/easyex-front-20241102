@@ -123,9 +123,6 @@ export default function DepositFiatForm({
                     />
                   </div>
                 </div>
-                <div className="mt-2 mb-[15px] text-[#ff0000]">
-                  {depositPolicy}
-                </div>
               </div>
               <span className="exchange pcVer">
                 <img src={ChangeImage} alt="" />
@@ -168,6 +165,9 @@ export default function DepositFiatForm({
             </div>
             <div className="btn_box">
               <button>Request</button>
+            </div>
+            <div className="mt-8 mb-[15px] text-black text-center">
+              &quot;*{depositPolicy}*&quot;
             </div>
           </div>
         </div>

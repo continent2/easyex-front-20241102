@@ -24,11 +24,12 @@ const CryptoFiatToggleGroup = forwardRef<SelectProps, Props>(
         ref={ref}
         color="primary"
         exclusive
-        className="mb-3"
+        className="mb-3 w-full"
         onChange={onChangeToggle}
         {...props}
       >
         <ToggleButton
+          className="w-1/2"
           sx={{
             '&.Mui-selected': {
               color: '#15a7a5',
@@ -43,6 +44,7 @@ const CryptoFiatToggleGroup = forwardRef<SelectProps, Props>(
           CRYPTO
         </ToggleButton>
         <ToggleButton
+          className="w-1/2"
           sx={{
             '&.Mui-selected': {
               color: '#15a7a5',

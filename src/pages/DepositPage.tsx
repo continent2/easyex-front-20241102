@@ -228,10 +228,13 @@ export default function DepositPage() {
   return (
     <>
       <h2>Deposit</h2>
-      <CryptoFiatToggleGroup
-        value={typecf}
-        onChange={(_, typecf) => setTypecf(typecf)}
-      />
+      <div className="w-[760px] mb-3 xl:w-[65%] lg:!w-[90%] lg:mx-auto">
+        <CryptoFiatToggleGroup
+          className="w-full"
+          value={typecf}
+          onChange={(_, typecf) => setTypecf(typecf)}
+        />
+      </div>
       {typecf === 'C' && (
         <FormProvider {...depositCryptoForm}>
           <div className="flexBox area02 ver_noList m-column">
