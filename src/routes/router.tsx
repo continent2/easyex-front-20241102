@@ -1,7 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import AuthJoinPage from '@/pages/auth/AuthJoinPage';
-import AuthLoginPage from '@/pages/auth/AuthLoginPage';
+import JoinPage from '@/pages/auth/JoinPage';
+import LoginPage from '@/pages/auth/LoginPage';
 import DepositPage from '@/pages/DepositPage';
 import HomePage from '@/pages/HomePage';
 import ActivityPage from '@/pages/my/ActivityPage';
@@ -32,8 +32,8 @@ const router = createBrowserRouter([
   {
     element: <AuthLayout />,
     children: [
-      { path: '/join', element: <AuthJoinPage /> },
-      { path: '/login', element: <AuthLoginPage /> },
+      { path: '/join', element: <JoinPage /> },
+      { path: '/login', element: <LoginPage /> },
     ],
   },
 ]);

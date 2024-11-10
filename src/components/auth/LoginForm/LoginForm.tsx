@@ -2,8 +2,6 @@ import { useForm } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { Autocomplete, Box, TextField } from '@mui/material';
 
-import AuthSnsLogin from '@/components/auth/AuthSnsLogin';
-
 import { countries } from '@/constants/countries';
 
 type Props = {
@@ -16,7 +14,7 @@ export type LoginFormValues = {
   pw: string;
 };
 
-export default function AuthLoginForm({ onSubmitLoginForm }: Props) {
+export default function LoginForm({ onSubmitLoginForm }: Props) {
   const {
     watch,
     register,
@@ -180,7 +178,6 @@ export default function AuthLoginForm({ onSubmitLoginForm }: Props) {
                 SMS Login
               </button>
             </div>
-            <AuthSnsLogin />
           </div>
         </div>
       </div>

@@ -35,6 +35,36 @@ export const logout = async () => {
   }
 };
 
+// 이메일 인증 코드 발송
+export const sendEmailVerifyCode = async (email: string) => {
+  try {
+    return await defaultAxios.get(`/users/emailverifycode/${email}`);
+  } catch (error) {
+    return error;
+  }
+};
+
+// 이메일 인증코드 검증
+export const verifyPhoneVerifyCode = async ({
+  phonenationalnumber,
+  phonecountrycode2letter,
+  code,
+}: {
+  phonenationalnumber: string;
+  phonecountrycode2letter: string;
+  code: string;
+}) => {
+  try {
+    return await defaultAxios.post(`/users/phoneverifycode`, {
+      phonenationalnumber,
+      phonecountrycode2letter,
+      code,
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
 // 휴대폰 인증 코드 발송
 export const sendPhoneVerifyCode = async ({
   phonecountrycode2letter,
@@ -53,4 +83,51 @@ export const sendPhoneVerifyCode = async ({
   } catch (error) {
     return error;
   }
+};
+
+// 휴대폰 인증코드 검증
+export const verifyEmailVerifyCode = async ({
+  email,
+  code,
+}: {
+  email: string;
+  code: string;
+}) => {
+  try {
+    return await defaultAxios.post(`/users/emailverifycode/${email}`, {
+      code,
+    });
+  } catch (error) {
+    return error;
+  }
+};
+
+export const join = async ({
+  email,
+  phonecountrycode2letter,
+  phonenationalnumber,
+  pw,
+  parentcode,
+}: {
+  email: string;
+  phonecountrycode2letter: string;
+  phonenationalnumber: string;
+  pw: string;
+  parentcode?: string;
+}) => {
+  return await defaultAxios.post(
+    '/users/join',
+    {
+      email,
+      phonecountrycode2letter,
+      phonenationalnumber,
+      pw,
+      parentcode,
+    },
+    {
+      params: {
+        nettype: env.netType,
+      },
+    },
+  );
 };

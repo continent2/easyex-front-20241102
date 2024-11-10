@@ -7,7 +7,7 @@ import SnsTwitterImage from '@/assets/img/sns-twitter.png';
 
 // import { env } from '@/env';
 
-export default function AuthSnsLogin() {
+export default function SnsLogin() {
   const onNaverLogin = () => {};
   const onKakaoLogin = () => {};
   const onFacebookLogin = () => {};

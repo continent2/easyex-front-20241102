@@ -1,13 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 
-import AuthLoginForm from '@/components/auth/AuthLoginForm';
-import { LoginFormValues } from '@/components/auth/AuthLoginForm/AuthLoginForm';
+import LoginForm from '@/components/auth/LoginForm';
+import { LoginFormValues } from '@/components/auth/LoginForm/LoginForm';
 
 import { login } from '@/lib/api/auth';
 import storage from '@/lib/storage';
 
-export default function AuthLoginPage() {
+export default function LoginPage() {
   const navigate = useNavigate();
   const { mutate: loginMutate } = useMutation({
     mutationFn: login,
@@ -33,5 +33,5 @@ export default function AuthLoginPage() {
     });
   };
 
-  return <AuthLoginForm onSubmitLoginForm={onSubmitLoginForm} />;
+  return <LoginForm onSubmitLoginForm={onSubmitLoginForm} />;
 }
