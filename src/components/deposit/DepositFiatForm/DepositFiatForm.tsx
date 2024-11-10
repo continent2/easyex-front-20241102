@@ -73,7 +73,7 @@ export default function DepositFiatForm({
                     <i className="label">Account</i>
                     <input
                       type="text"
-                      className="inp_style"
+                      className="inp_style "
                       {...register('fromAccount', {
                         required: 'Please Enter account',
                         pattern: {

@@ -225,6 +225,41 @@ export default function DepositPage() {
     }
   };
 
+  const { watch: depositCryptoFormWatch, setValue: depositCryptoFormSetValue } =
+    depositCryptoForm;
+
+  const depositCryptoFormWatchValues = depositCryptoFormWatch();
+
+  useEffect(() => {
+    const { fromAccount, fromAmount, fromTxhash } =
+      depositCryptoFormWatchValues;
+    if (fromAccount && !/^[a-zA-Z0-9]+$/.test(fromAccount)) {
+      depositCryptoFormSetValue('fromAccount', fromAccount.slice(0, -1));
+    }
+    if (fromAmount && !/^[\d.]+$/.test(fromAmount)) {
+      depositCryptoFormSetValue('fromAmount', fromAmount.slice(0, -1));
+    }
+
+    if (fromTxhash && !/^[a-zA-Z0-9]+$/.test(fromTxhash)) {
+      depositCryptoFormSetValue('fromTxhash', fromTxhash.slice(0, -1));
+    }
+  }, [depositCryptoFormWatchValues]);
+
+  const { watch: depositFiatFormWatch, setValue: depositFiatFormSetValue } =
+    depositFiatForm;
+
+  const depositFiatFormWatchValues = depositFiatFormWatch();
+
+  useEffect(() => {
+    const { fromAccount, fromAmount } = depositFiatFormWatchValues;
+    if (fromAccount && !/^\d+$/.test(fromAccount)) {
+      depositFiatFormSetValue('fromAccount', fromAccount.slice(0, -1));
+    }
+    if (fromAmount && !/^[1-9]\d*$/.test(fromAmount)) {
+      depositFiatFormSetValue('fromAmount', fromAmount.slice(0, -1));
+    }
+  }, [depositFiatFormWatchValues]);
+
   return (
     <>
       <h2>Deposit</h2>

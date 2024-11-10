@@ -79,7 +79,7 @@ export default function DepositCryptoForm({
                   value={activeCryptoIndex}
                 />
                 <textarea
-                  className="inp_style"
+                  className="inp_style disabled:bg-gray-300"
                   style={{ height: '100%', resize: 'none' }}
                   disabled={!!watch('fromTxhash')}
                   {...register('fromAccount', {
@@ -175,7 +175,7 @@ export default function DepositCryptoForm({
               />
               <input
                 type="text"
-                className="inp_style"
+                className="inp_style disabled:bg-gray-300"
                 {...register('fromAmount', {
                   validate: (fromAmount) => {
                     if (watch('fromTxhash')) {
@@ -226,7 +226,7 @@ export default function DepositCryptoForm({
               />
               <input
                 type="text"
-                className="inp_style"
+                className="inp_style disabled:bg-gray-300"
                 disabled={!!watch('fromAccount') || !!watch('fromAmount')}
                 {...register('fromTxhash', {
                   validate: (fromTxhash) => {

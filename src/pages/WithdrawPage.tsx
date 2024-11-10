@@ -322,6 +322,47 @@ export default function WithdrawPage() {
     }
   };
 
+  const watchValues = watch();
+
+  useEffect(() => {
+    const {
+      from: {
+        bankAccount,
+        bankAmount: fromBankAmount,
+        cryptoAccount,
+        cryptoAmount: fromCryptoAmount,
+        txhash,
+      },
+      to: { bankAmount: toBankAmount, cryptoAmount: toCryptoAmount },
+    } = watch();
+
+    if (bankAccount && !/^\d+$/.test(bankAccount)) {
+      setValue('from.bankAccount', bankAccount.slice(0, -1));
+    }
+    if (fromBankAmount && !/^[1-9]\d*$/.test(fromBankAmount)) {
+      setValue('from.bankAmount', fromBankAmount.slice(0, -1));
+    }
+    // if (toBankAmount && !/^[1-9]\d*$/.test(toBankAmount)) {
+    //   setValue('to.bankAmount', toBankAmount.slice(0, -1));
+    // }
+
+    if (cryptoAccount && !/^[a-zA-Z0-9]+$/.test(cryptoAccount)) {
+      setValue('from.cryptoAccount', cryptoAccount.slice(0, -1));
+    }
+
+    if (fromCryptoAmount && !/^[\d.]+$/.test(fromCryptoAmount)) {
+      setValue('from.cryptoAmount', fromCryptoAmount.slice(0, -1));
+    }
+
+    // if (toCryptoAmount && !/^[\d.]+$/.test(toCryptoAmount)) {
+    //   setValue('to.cryptoAmount', toCryptoAmount.slice(0, -1));
+    // }
+
+    if (txhash && !/^[a-zA-Z0-9]+$/.test(txhash)) {
+      setValue('from.txhash', txhash.slice(0, -1));
+    }
+  }, [watchValues]);
+
   return (
     <>
       <h2>withdraw</h2>
