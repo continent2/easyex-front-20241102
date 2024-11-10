@@ -3,18 +3,24 @@ import { defaultAxios } from '@/lib/api/apiClient';
 
 // 로그인
 export const login = async ({
+  email,
   pw,
+  code,
   phonecountrycode2letter,
   phonenationalnumber,
 }: {
-  pw: string;
-  phonecountrycode2letter: string;
-  phonenationalnumber: string;
+  email?: string;
+  pw?: string;
+  code?: string;
+  phonecountrycode2letter?: string;
+  phonenationalnumber?: string;
 }) => {
   return defaultAxios.post(
     '/users/login',
     {
+      email,
       pw,
+      code,
       phonecountrycode2letter,
       phonenationalnumber,
     },
