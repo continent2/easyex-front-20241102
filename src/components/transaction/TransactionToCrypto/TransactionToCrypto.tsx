@@ -1,27 +1,26 @@
 import { useFormContext } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 import { WithDrawFormValue } from '@/pages/WithdrawPage';
 
 import ImageSelect from '@/components/common/ImageSelect';
 
-import { AdminCryptoAccount } from '@/types/deposit';
+import { validateCrypto } from '@/lib/validate';
+import { Crypto } from '@/types/crypto';
 
 type Props = {
-  adminCryptoAccounts?: AdminCryptoAccount[];
+  cryptos?: Crypto[];
 };
 
-export default function TransactionToCrypto({ adminCryptoAccounts }: Props) {
+export default function TransactionToCrypto({ cryptos }: Props) {
   const {
     watch,
     register,
     formState: { errors },
   } = useFormContext<WithDrawFormValue>();
 
-  const activeAdminCryptoAccountIndex = watch(
-    'to.activeAdminCryptoAccountIndex',
-  );
-  const activeAdminCryptoAccount =
-    adminCryptoAccounts?.[activeAdminCryptoAccountIndex];
+  const activeCryptoIndex = watch('to.activeCryptoIndex');
+  const activeCrypto = cryptos?.[activeCryptoIndex];
 
   return (
     <div>
@@ -32,28 +31,43 @@ export default function TransactionToCrypto({ adminCryptoAccounts }: Props) {
         <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
           Account
         </h3>
-        <div className="money_inp ver_textarea !px-[20px]">
-          {adminCryptoAccounts && (
+        <div className="money_inp ver_textarea !px-[20px] relative !overflow-visible">
+          {cryptos && (
             <ImageSelect
-              options={adminCryptoAccounts?.map(
-                (adminCryptoAccount, index) => ({
-                  img: adminCryptoAccount.urllogo,
-                  label: adminCryptoAccount.symbol,
-                  value: index,
-                }),
-              )}
+              options={cryptos?.map((crypto, index) => ({
+                img: crypto.urllogo,
+                label: crypto.symbol,
+                value: index,
+              }))}
               isVisibleLabel={false}
               className="z-10"
-              {...register('to.activeAdminCryptoAccountIndex')}
-              value={activeAdminCryptoAccountIndex}
+              {...register('to.activeCryptoIndex')}
+              value={activeCryptoIndex}
             />
           )}
           <textarea
-            className="inp_style"
+            className="inp_style "
             style={{ height: '100%', resize: 'none' }}
-            value={activeAdminCryptoAccount?.address || ''}
-            readOnly
+            {...register('to.cryptoAccount', {
+              validate: (cryptoAccount) => {
+                if (!cryptoAccount) return 'Please Enter account';
+
+                if (!activeCrypto) {
+                  return false;
+                }
+
+                return (
+                  validateCrypto(cryptoAccount, activeCrypto?.symbol) ||
+                  'Invalid account'
+                );
+              },
+            })}
           ></textarea>
+          <ErrorMessage
+            errors={errors}
+            name="to.cryptoAccount"
+            render={({ message }) => <p className="red_alert">{message}</p>}
+          />
         </div>
       </div>
       <div className="cont_box">
@@ -62,19 +76,17 @@ export default function TransactionToCrypto({ adminCryptoAccounts }: Props) {
             Amount
           </h3>
           <div className="money_inp  ">
-            {adminCryptoAccounts && (
+            {cryptos && (
               <ImageSelect
-                options={adminCryptoAccounts?.map(
-                  (adminCryptoAccount, index) => ({
-                    img: adminCryptoAccount.urllogo,
-                    label: adminCryptoAccount.symbol,
-                    value: index,
-                  }),
-                )}
+                options={cryptos?.map((crypto, index) => ({
+                  img: crypto.urllogo,
+                  label: crypto.symbol,
+                  value: index,
+                }))}
                 isVisibleLabel={false}
                 className="z-10"
-                {...register('to.activeAdminCryptoAccountIndex')}
-                value={activeAdminCryptoAccountIndex}
+                {...register('to.activeCryptoIndex')}
+                value={activeCryptoIndex}
               />
             )}
             <input
@@ -83,7 +95,7 @@ export default function TransactionToCrypto({ adminCryptoAccounts }: Props) {
               {...register('to.cryptoAmount')}
               readOnly
             />
-            <span>{activeAdminCryptoAccount?.symbol}</span>
+            <span>{activeCrypto?.symbol}</span>
           </div>
         </div>
       </div>

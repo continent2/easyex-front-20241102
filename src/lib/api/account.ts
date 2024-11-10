@@ -9,12 +9,12 @@ export const getAccounts = async ({
   filterkey,
   filterval,
 }: {
-  offset: number;
-  limit: number;
-  orderKey: string;
-  order: 'ASC' | 'DESC';
-  filterkey: string;
-  filterval: string;
+  offset?: number;
+  limit?: number;
+  orderKey?: string;
+  order?: 'ASC' | 'DESC';
+  filterkey?: string;
+  filterval?: string;
 }) => {
   return defaultAxios.get(
     `/queriesauth/rows/useraccounts/active/1/${offset}/${limit}/${orderKey}/${order}`,

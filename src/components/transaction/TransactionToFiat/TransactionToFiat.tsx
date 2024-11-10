@@ -1,21 +1,25 @@
 import { useFormContext } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 import { WithDrawFormValue } from '@/pages/WithdrawPage';
 
 import ImageSelect from '@/components/common/ImageSelect';
 
-import { AdminBankAccount } from '@/types/deposit';
+import { Bank } from '@/types/bank';
 
 type Props = {
-  adminBankAccounts?: AdminBankAccount[];
+  banks?: Bank[];
 };
 
-export default function TransactionToFiat({ adminBankAccounts }: Props) {
-  const { register, watch } = useFormContext<WithDrawFormValue>();
+export default function TransactionToFiat({ banks }: Props) {
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext<WithDrawFormValue>();
 
-  const ActiveAdminBankAccountIndex = watch('to.activeAdminBankAccountIndex');
-  const activeAdminBankAccout =
-    adminBankAccounts?.[ActiveAdminBankAccountIndex];
+  const ActiveBankIndex = watch('to.activeBankIndex');
+  const activeBank = banks?.[ActiveBankIndex];
 
   return (
     <div className="">
@@ -25,29 +29,39 @@ export default function TransactionToFiat({ adminBankAccounts }: Props) {
       <div className="flex flex-col gap-2">
         <div className="money_inp ">
           <i className="label !min-w-0">BANK</i>
-          {adminBankAccounts && (
+          {banks && (
             <ImageSelect
               className="z-10"
-              options={adminBankAccounts?.map((adminAccount, index) => ({
-                img: adminAccount.urllogo,
-                label: adminAccount.bankname,
+              options={banks?.map((bank, index) => ({
+                img: bank.urllogo,
+                label: bank.banknameen,
                 value: index,
               }))}
               isVisibleLabel={true}
-              {...register('to.activeAdminBankAccountIndex', {
+              {...register('to.activeBankIndex', {
                 valueAsNumber: true,
               })}
-              value={ActiveAdminBankAccountIndex}
+              value={ActiveBankIndex}
             />
           )}
         </div>
         <div className="money_inp in_alert">
-          <i className="label">Account</i>
+          <i className="label">Bank</i>
           <input
             type="text"
             className="inp_style"
-            defaultValue={activeAdminBankAccout?.number}
-            readOnly
+            {...register('to.bankAccount', {
+              required: 'Please Enter account',
+              pattern: {
+                value: /^[0-9][0-9-]*$/,
+                message: 'Invalid account.',
+              },
+            })}
+          />
+          <ErrorMessage
+            errors={errors}
+            name="to.bankAccount"
+            render={({ message }) => <p className="red_alert">{message}</p>}
           />
         </div>
         <div className="money_inp in_alert">

@@ -52,3 +52,8 @@ export const withdraw = (params: {
     ...params,
   });
 };
+
+// 출금 가능 쌍조회
+export const getExchangeAllowedPairs = () => {
+  return defaultAxios.get('/exchanges/allowedpairs');
+};
