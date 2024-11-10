@@ -33,5 +33,5 @@ jobs:
             source ~/.nvm/nvm.sh
             npm i
             npm run build
-            cp build/* /var/www/html/easychange1.co -R
+            cp build/* /var/www/html/easyex.online -R
             rm *lock*
