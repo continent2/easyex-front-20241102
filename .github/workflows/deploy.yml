@@ -1,0 +1,37 @@
+name: Deploy
+on: # Event 감지
+  push:
+    branches:
+      [main] 
+
+  workflow_dispatch:
+
+env:
+  CODE_DEPLOY_APPLICATION_NAME : easyex 
+  CODE_DEPLOY_DEPLOYMENT_GROUP_NAME : easyex
+ 
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    env:
+      CI: false
+
+    steps:
+      - name: Deploy # Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with: 
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PEM_KEY }}
+          port: ${{ secrets.PORT }} 
+          script_stop: true
+          script: |
+            cd /root/easyex-front-20241102
+            git pull origin main
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
+            npm i
+            npm run build
+            cp build/* /var/www/html/easyex.online -R
+            rm *lock*
