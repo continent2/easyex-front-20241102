@@ -86,6 +86,15 @@ export default function JoinPage() {
 
   const { mutate: sendEmailVerifyCodeMutate } = useMutation({
     mutationFn: sendEmailVerifyCode,
+    onSuccess: (response: any) => {
+      if (response?.data?.status === 'OK') {
+        openModal({
+          title: 'Success',
+          content: ' Verify code has been sent to the provided email.',
+          isVisibleOkBtn: true,
+        });
+      }
+    },
   });
 
   const onSendEmailVerifyCode = async () => {
@@ -119,6 +128,15 @@ export default function JoinPage() {
 
   const { mutate: sendPhoneVerifyCodeMutate } = useMutation({
     mutationFn: sendPhoneVerifyCode,
+    onSuccess: (response: any) => {
+      if (response?.data?.status === 'OK') {
+        openModal({
+          title: 'Success',
+          content: ' Verify code has been sent to the provided phone.',
+          isVisibleOkBtn: true,
+        });
+      }
+    },
   });
 
   const onSendPhoneVerifyCode = async () => {
