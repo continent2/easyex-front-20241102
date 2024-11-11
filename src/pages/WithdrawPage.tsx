@@ -402,9 +402,7 @@ export default function WithdrawPage() {
                       </button>
                     )}
                   </div>
-                  <div className="mt-8 text-black text-center">
-                    &quot;*{withDrawPolicy}*&quot;
-                  </div>
+                  <div className="mt-8 text-black">*{withDrawPolicy}</div>
                 </div>
               </div>
             </form>

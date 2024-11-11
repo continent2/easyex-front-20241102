@@ -295,9 +295,7 @@ export default function DepositCryptoForm({
             <div className="btn_box">
               <button>Request</button>
             </div>
-            <div className="mt-8 text-black text-center">
-              &quot;*{depositPolicy}*&quot;
-            </div>
+            <div className="mt-8 text-black">*{depositPolicy}</div>
           </div>
         </div>
       </form>

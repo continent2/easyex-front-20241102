@@ -50,7 +50,13 @@ export default function Header() {
             {user && <div className="txt_box">Hello, {user.username}</div>}
 
             <div className="a_box">
-              <a href="/login">Login</a>
+              {user ? (
+                <a className="cursor-pointer" onClick={onLogout}>
+                  logout
+                </a>
+              ) : (
+                <a href="/login">Login</a>
+              )}
               <a href="/join">join</a>
             </div>
             <div className="nav_open on">
