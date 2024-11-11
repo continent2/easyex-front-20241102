@@ -5,8 +5,11 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import CryptoFiatToggleGroup from '@/components/common/CryptoFiatToggleGroup';
 import TransactionFromAccount from '@/components/transaction/TransactionFromAccount';
+import TransactionFromDisabled from '@/components/transaction/TransactionFromDisabled';
 import TransactionToCrypto from '@/components/transaction/TransactionToCrypto';
+import TransactionToCryptoDisabled from '@/components/transaction/TransactionToCryptoDisabled';
 import TransactionToFiat from '@/components/transaction/TransactionToFiat';
+import TransactionToFiatDisabled from '@/components/transaction/TransactionToFiatDisabled';
 
 import ChangeImage from '@/assets/img/ico_change.png';
 
@@ -20,6 +23,11 @@ import {
   withdraw,
 } from '@/lib/api/withdraw';
 import useModal from '@/lib/hooks/useModal';
+import {
+  getDecimalPlaces,
+  validatePositiveDecimal,
+  validatePositiveNumber,
+} from '@/lib/validate';
 import { Account } from '@/types/account';
 import { Bank } from '@/types/bank';
 import { Crypto } from '@/types/crypto';
@@ -59,7 +67,7 @@ export default function WithdrawPage() {
     },
   });
 
-  const { watch, setValue, handleSubmit } = withDrawForm;
+  const { watch, setValue, handleSubmit, setError, reset } = withDrawForm;
 
   const { data: accounts } = useQuery({
     queryKey: ['accounts', 50, 0, 'syombol', 'ASC'],
@@ -71,6 +79,13 @@ export default function WithdrawPage() {
         order: 'ASC',
       }),
     select: (response) => response.data.list as Account[],
+  });
+
+  const { data: cryptos } = useQuery({
+    queryKey: ['cryptos', 'C'],
+    queryFn: () => getCryptos('C'),
+    select: (response) => response.data.list as Crypto[],
+    enabled: accounts && accounts.length === 0,
   });
 
   useEffect(() => {
@@ -97,47 +112,69 @@ export default function WithdrawPage() {
   });
 
   const activeAccountSymbol =
-    accounts?.[watch('from.activeAccountIndex')].symbol;
+    accounts?.[watch('from.activeAccountIndex')]?.symbol;
 
-  const { data: cryptos } = useQuery({
-    queryKey: ['cryptos', 'C', activeAccountSymbol],
-    queryFn: () => getCryptos('C'),
-    select: (response) => {
-      const cryptos = response.data.list as Crypto[];
+  const [availableCryptos, setAvailableCryptos] = useState<Crypto[]>([]);
+  const [isAvailableFiat, setIsAvailableFiat] = useState(false);
 
-      if (!activeAccountSymbol) {
-        return;
+  // From에 사용가능한 Crypto, Fiat 필터
+  useEffect(() => {
+    if (!activeAccountSymbol || !exchangeAllowedPairs || !cryptos) {
+      return;
+    }
+
+    const available =
+      exchangeAllowedPairs?.data?.j_fromsymbol_toarr[activeAccountSymbol];
+    if (available) {
+      const availableCryptos = cryptos.filter((crypto) =>
+        available.find((available: any) => available?.quote === crypto.symbol),
+      );
+      setAvailableCryptos(availableCryptos);
+
+      if (available.find((available: any) => available?.quote === 'KRW')) {
+        setIsAvailableFiat(true);
+      } else {
+        setIsAvailableFiat(false);
       }
+    }
+  }, [activeAccountSymbol, exchangeAllowedPairs, cryptos]);
 
-      if (exchangeAllowedPairs?.data?.j_fromsymbol_toarr[activeAccountSymbol]) {
-        const possibleSymbols =
-          exchangeAllowedPairs?.data?.j_fromsymbol_toarr[activeAccountSymbol];
+  const activeToCryptoSymbol =
+    availableCryptos?.[watch('to.activeCryptoIndex')]?.symbol;
 
-        return cryptos.filter((crypto) =>
-          possibleSymbols.find(
-            (possibleSymbol: any) => possibleSymbol?.quote === crypto.symbol,
-          ),
-        );
-      }
+  const from = accounts?.[watch('from.activeAccountIndex')]?.symbol as string;
 
-      return cryptos;
-    },
-    enabled: toTypecf === 'C' && !!exchangeAllowedPairs,
-  });
-
-  const activeToCryptoAccountSymbol =
-    cryptos?.[watch('to.activeCryptoIndex')]?.symbol;
-
-  const from = accounts?.[watch('from.activeAccountIndex')].symbol as string;
-
-  const to = (toTypecf === 'C' ? activeToCryptoAccountSymbol : 'KRW') as string;
+  const to = (toTypecf === 'C' ? activeToCryptoSymbol : 'KRW') as string;
   const amount = watch('from.amount');
 
+  const [activeExchangeAllowedPair, setActiveExchangeAllowedPair] =
+    useState<any>();
+
+  useEffect(() => {
+    if (!exchangeAllowedPairs || !from || !to) {
+      return;
+    }
+
+    const activeExchangeAllowedPair = exchangeAllowedPairs.data.list.find(
+      (exchangeAllowedPair: any) =>
+        exchangeAllowedPair.from === from && exchangeAllowedPair.to === to,
+    );
+    setActiveExchangeAllowedPair(activeExchangeAllowedPair);
+  }, [exchangeAllowedPairs, from, to]);
+
+  // 선택값 변경시 초기화
   useEffect(() => {
     setValue('from.amount', '');
     setValue('to.bankAmount', '');
     setValue('to.cryptoAmount', '');
-  }, [watch('from.activeAccountIndex')]);
+    setValue('to.bankAmount', '');
+    setValue('to.cryptoAccount', '');
+    setValue('to.bankAccount', '');
+  }, [
+    watch('from.activeAccountIndex'),
+    watch('to.activeCryptoIndex'),
+    toTypecf,
+  ]);
 
   const { data: exChangeRate } = useQuery({
     queryKey: ['exChangeRate', toTypecf, from, to, amount],
@@ -148,7 +185,11 @@ export default function WithdrawPage() {
         amount,
       }),
     select: (response) => response.data.respdata as ExChangeRate,
-    enabled: !!to && !!from && !!amount && to !== from,
+    enabled:
+      !!amount &&
+      validatePositiveDecimal(amount) &&
+      activeExchangeAllowedPair?.from === from &&
+      activeExchangeAllowedPair?.to === to,
   });
 
   useEffect(() => {
@@ -184,7 +225,11 @@ export default function WithdrawPage() {
   });
 
   const onSubmitWithdrawFrom = (withDrawFormValue: WithDrawFormValue) => {
-    const activeCrypto = cryptos?.[withDrawFormValue.to.activeCryptoIndex];
+    // 최대, 최소 수량 validation
+    const isAmount = Boolean(parseFloat(withDrawFormValue.from.amount)) == true;
+
+    const activeCrypto =
+      availableCryptos?.[withDrawFormValue.to.activeCryptoIndex];
     const activeBank = banks?.[withDrawFormValue.to.activeBankIndex];
 
     const activeAccount = accounts?.[withDrawFormValue.from.activeAccountIndex];
@@ -236,6 +281,7 @@ export default function WithdrawPage() {
 
   const watchValues = watch();
 
+  // 입력 유효성 검사 후 제거
   useEffect(() => {
     const {
       from: { amount: fromAmount, activeAccountIndex },
@@ -253,13 +299,23 @@ export default function WithdrawPage() {
 
     const activeAccount = accounts[activeAccountIndex];
 
-    if (activeAccount.typecf === 'C') {
+    if (
+      getDecimalPlaces(Number(fromAmount)) >
+      activeExchangeAllowedPair?.precision
+    ) {
+      setValue('from.amount', fromAmount.slice(0, -1));
+      setError('from.amount', {
+        message: 'a',
+      });
+    }
+
+    if (activeAccount?.typecf === 'C') {
       if (fromAmount && !/^[\d.]+$/.test(fromAmount)) {
         setValue('from.amount', fromAmount.slice(0, -1));
       }
     }
 
-    if (activeAccount.typecf === 'F') {
+    if (activeAccount?.typecf === 'F') {
       if (fromAmount && !/^[1-9]\d*$/.test(fromAmount)) {
         setValue('from.amount', fromAmount.slice(0, -1));
       }
@@ -282,6 +338,10 @@ export default function WithdrawPage() {
     }
   }, [watchValues]);
 
+  if (!accounts) {
+    return null;
+  }
+
   return (
     <>
       <h2>withdraw</h2>
@@ -291,7 +351,16 @@ export default function WithdrawPage() {
             <form onSubmit={handleSubmit(onSubmitWithdrawFrom)}>
               <div className="cont_box flex gap-10 xl:flex-col">
                 <div>
-                  <TransactionFromAccount accounts={accounts} />
+                  {accounts && accounts.length > 0 ? (
+                    // 계좌 있을때
+                    <TransactionFromAccount
+                      accounts={accounts}
+                      activeExchangeAllowedPair={activeExchangeAllowedPair}
+                    />
+                  ) : (
+                    // 계좌 없을때
+                    <TransactionFromDisabled cryptos={cryptos} />
+                  )}
                 </div>
                 <img
                   className="w-9 h-9 self-center xl:hidden"
@@ -302,16 +371,36 @@ export default function WithdrawPage() {
                     value={toTypecf}
                     onChange={(_, toTypecf) => setToTypecf(toTypecf)}
                   />
-                  {toTypecf === 'C' && (
-                    <TransactionToCrypto cryptos={cryptos} />
-                  )}
-                  {toTypecf === 'F' && <TransactionToFiat banks={banks} />}
+                  {toTypecf === 'C' &&
+                    (accounts.length > 0 && availableCryptos.length > 0 ? (
+                      <TransactionToCrypto cryptos={availableCryptos} />
+                    ) : (
+                      <TransactionToCryptoDisabled cryptos={cryptos} />
+                    ))}
+
+                  {toTypecf === 'F' &&
+                    (accounts.length > 0 && isAvailableFiat ? (
+                      <TransactionToFiat banks={banks} />
+                    ) : (
+                      <TransactionToFiatDisabled banks={banks} />
+                    ))}
                 </div>
               </div>
               <div className="cont_box flexBox area02 ver_noList m-column">
                 <div className="inp_tit !w-full">
                   <div className="btn_box">
-                    <button>Request</button>
+                    {(accounts.length > 0 &&
+                      toTypecf === 'C' &&
+                      availableCryptos.length > 0) ||
+                    (accounts.length > 0 &&
+                      toTypecf === 'F' &&
+                      isAvailableFiat) ? (
+                      <button>Request</button>
+                    ) : (
+                      <button className="disabled:!bg-gray-300" disabled>
+                        Request
+                      </button>
+                    )}
                   </div>
                   <div className="mt-8 text-black text-center">
                     &quot;*{withDrawPolicy}*&quot;

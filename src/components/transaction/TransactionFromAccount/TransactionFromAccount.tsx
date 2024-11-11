@@ -5,14 +5,19 @@ import { WithDrawFormValue } from '@/pages/WithdrawPage';
 
 import ImageSelect from '@/components/common/ImageSelect';
 
+import { safeToLocaleString } from '@/lib/common';
 import { validatePositiveDecimal } from '@/lib/validate';
 import { Account } from '@/types/account';
 
 type Props = {
   accounts?: Account[];
+  activeExchangeAllowedPair: any;
 };
 
-export default function TransactionFromAccount({ accounts }: Props) {
+export default function TransactionFromAccount({
+  accounts,
+  activeExchangeAllowedPair,
+}: Props) {
   const {
     watch,
     register,
@@ -37,8 +42,8 @@ export default function TransactionFromAccount({ accounts }: Props) {
             {accounts && (
               <ImageSelect
                 options={accounts?.map((account, index) => ({
-                  img: account.urllogo,
-                  label: account.symbol,
+                  img: account?.urllogo,
+                  label: account?.symbol,
                   value: index,
                 }))}
                 isVisibleLabel={true}
@@ -92,12 +97,32 @@ export default function TransactionFromAccount({ accounts }: Props) {
                   if (!amount) {
                     return 'Please enter amount';
                   }
+
+                  if (activeExchangeAllowedPair) {
+                    if (
+                      Number(amount) <
+                      Number(activeExchangeAllowedPair.minwithdrawamount)
+                    ) {
+                      return `Minimum withdrawal amount is ${activeExchangeAllowedPair.minwithdrawamount}`;
+                    }
+
+                    if (
+                      Number(amount) >
+                      Number(activeExchangeAllowedPair.maxwithdrawamount)
+                    ) {
+                      return `Maximum withdrawal amount is ${activeExchangeAllowedPair.maxwithdrawamount}`;
+                    }
+                  }
+
                   return validatePositiveDecimal(amount) || 'Invalid amount';
                 },
               })}
             />
             <span>{activeAccount?.symbol}</span>
           </div>
+          {activeExchangeAllowedPair && (
+            <div className="mt-4">{`MIN: ${safeToLocaleString(Number(activeExchangeAllowedPair.minwithdrawamount))},  MAX:${safeToLocaleString(Number(activeExchangeAllowedPair.maxwithdrawamount))}`}</div>
+          )}
           <ErrorMessage
             errors={errors}
             name="from.amount"

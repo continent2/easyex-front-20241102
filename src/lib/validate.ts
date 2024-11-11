@@ -28,3 +28,16 @@ export const validatePositiveDecimal = (value: string) => {
 export const validatePositiveNumber = (value: string) => {
   return /^(?!0$)[1-9]\d*$/.test(value);
 };
+
+export function getDecimalPlaces(n: number): number {
+  const s: string = '' + +n;
+  const match = /(?:\.(\d+))?(?:[eE]([+\-]?\d+))?$/.exec(s);
+  if (!match) {
+    return 0;
+  }
+  return Math.max(
+    0,
+    (match[1] === '0' ? 0 : (match[1] || '').length) -
+      parseInt(match[2] || '0', 10),
+  );
+}
