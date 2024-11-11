@@ -89,7 +89,12 @@ export default function Header() {
       </div>
       <header
         ref={headerRef}
-        className={clsx('header', isNavOpen && 'fix', isFixed && 'fixed')}
+        className={clsx(
+          'header',
+          isNavOpen && 'fix',
+          isFixed && 'fixed',
+          '!z-50',
+        )}
       >
         <div className="inner flexBox area02 ver_noList">
           <h1>
