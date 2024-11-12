@@ -41,7 +41,7 @@ export default function DepositCryptoForm({
     watch,
     setValue,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useFormContext<DepositCryptoFormValue>();
 
   const activeCryptoIndex = watch('activeCryptoIndex');
@@ -79,7 +79,7 @@ export default function DepositCryptoForm({
                   value={activeCryptoIndex}
                 />
                 <textarea
-                  className="inp_style disabled:bg-gray-300"
+                  className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
                   style={{ height: '100%', resize: 'none' }}
                   disabled={!!watch('fromTxhash')}
                   {...register('fromAccount', {
@@ -175,7 +175,7 @@ export default function DepositCryptoForm({
               />
               <input
                 type="text"
-                className="inp_style disabled:bg-gray-300"
+                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
                 {...register('fromAmount', {
                   validate: (fromAmount) => {
                     if (watch('fromTxhash')) {
@@ -226,7 +226,7 @@ export default function DepositCryptoForm({
               />
               <input
                 type="text"
-                className="inp_style disabled:bg-gray-300"
+                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
                 disabled={!!watch('fromAccount') || !!watch('fromAmount')}
                 {...register('fromTxhash', {
                   validate: (fromTxhash) => {
@@ -293,7 +293,9 @@ export default function DepositCryptoForm({
         <div className="cont_box flexBox area02 ver_noList m-column">
           <div className="inp_tit !w-full">
             <div className="btn_box">
-              <button>Request</button>
+              <button className="disabled:!bg-gray-300" disabled={!isValid}>
+                Request
+              </button>
             </div>
             <div className="mt-8 text-black">*{depositPolicy}</div>
           </div>

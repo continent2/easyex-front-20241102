@@ -38,7 +38,7 @@ export default function LoginForm({
             <div className="money_inp">
               <i className="label">Email</i>
               <input
-                className="inp_style disabled:bg-gray-300"
+                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
                 disabled={isInputPhone}
                 {...register('email', {
                   required: isInputPhone ? false : 'Please Enter email',
@@ -69,7 +69,7 @@ export default function LoginForm({
               <i className="label mr-[15px]">VerifyCode</i>
               <input
                 disabled={isInputPhone || !!watch('emailPw')}
-                className="inp_style disabled:bg-gray-300"
+                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
                 {...register('emailVerifyCode', {
                   required:
                     isInputPhone || !!watch('emailPw')
@@ -88,7 +88,7 @@ export default function LoginForm({
             <i className="label">Password</i>
             <input
               type="password"
-              className="inp_style disabled:bg-gray-300"
+              className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
               autoComplete="current-password"
               disabled={isInputPhone || !!watch('emailVerifyCode')}
               {...register('emailPw', {
@@ -193,7 +193,8 @@ export default function LoginForm({
                       disabled={isInputEmail}
                       inputProps={{
                         ...params.inputProps,
-                        className: 'disabled:bg-gray-300',
+                        className:
+                          'disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid',
                         style: { paddingLeft: '90px' },
                       }}
                     />
@@ -210,7 +211,7 @@ export default function LoginForm({
               <i className="label mr-[15px]">Phone number</i>
               <input
                 type="text"
-                className="inp_style disabled:bg-gray-300"
+                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
                 disabled={isInputEmail}
                 {...register('phonenationalnumber', {
                   required: isInputEmail ? false : 'Please enter phon number',
@@ -234,7 +235,7 @@ export default function LoginForm({
             <div className="money_inp">
               <i className="label mr-[15px]">VerifyCode</i>
               <input
-                className="inp_style disabled:bg-gray-300"
+                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
                 disabled={isInputEmail || !!watch('phonePw')}
                 {...register('phoneVerifyCode', {
                   required:
@@ -254,7 +255,7 @@ export default function LoginForm({
             <i className="label">Password</i>
             <input
               type="password"
-              className="inp_style disabled:bg-gray-300"
+              className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
               autoComplete="current-password"
               disabled={isInputEmail || !!watch('phoneVerifyCode')}
               {...register('phonePw', {

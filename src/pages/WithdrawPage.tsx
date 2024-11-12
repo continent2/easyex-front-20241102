@@ -56,6 +56,7 @@ export default function WithdrawPage() {
 
   const withDrawForm = useForm<WithDrawFormValue>({
     criteriaMode: 'all',
+    mode: 'onChange',
     defaultValues: {
       from: {
         activeAccountIndex: 0,
@@ -67,7 +68,14 @@ export default function WithdrawPage() {
     },
   });
 
-  const { watch, setValue, handleSubmit, setError, reset } = withDrawForm;
+  const {
+    watch,
+    setValue,
+    handleSubmit,
+    setError,
+    reset,
+    formState: { isValid },
+  } = withDrawForm;
 
   const { data: accounts } = useQuery({
     queryKey: ['accounts', 50, 0, 'syombol', 'ASC'],
@@ -299,14 +307,17 @@ export default function WithdrawPage() {
 
     const activeAccount = accounts[activeAccountIndex];
 
-    if (
-      getDecimalPlaces(Number(fromAmount)) >
-      activeExchangeAllowedPair?.precision
-    ) {
-      setValue('from.amount', fromAmount.slice(0, -1));
-      setError('from.amount', {
-        message: 'a',
-      });
+    if (activeExchangeAllowedPair) {
+      // if (
+      //   Number(fromAmount) < Number(activeExchangeAllowedPair.minwithdrawamount)
+      // ) {
+      // }
+
+      if (
+        Number(fromAmount) > Number(activeExchangeAllowedPair.maxwithdrawamount)
+      ) {
+        setValue('from.amount', activeExchangeAllowedPair.maxwithdrawamount);
+      }
     }
 
     if (activeAccount?.typecf === 'C') {
@@ -395,7 +406,12 @@ export default function WithdrawPage() {
                     (accounts.length > 0 &&
                       toTypecf === 'F' &&
                       isAvailableFiat) ? (
-                      <button>Request</button>
+                      <button
+                        className="disabled:!bg-gray-300"
+                        disabled={!isValid}
+                      >
+                        Request
+                      </button>
                     ) : (
                       <button className="disabled:!bg-gray-300" disabled>
                         Request

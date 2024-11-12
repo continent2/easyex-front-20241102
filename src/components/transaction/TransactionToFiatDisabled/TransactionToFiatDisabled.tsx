@@ -28,7 +28,7 @@ export default function TransactionToFiatDisabled({ banks }: Props) {
       </h3>
       <div className="flex flex-col gap-2">
         <div className="money_inp ">
-          <i className="label !min-w-0">BANK</i>
+          <i className="label !min-w-0">Account</i>
           {banks && (
             <ImageSelect
               className="z-10"
@@ -46,10 +46,10 @@ export default function TransactionToFiatDisabled({ banks }: Props) {
           )}
         </div>
         <div className="money_inp in_alert">
-          <i className="label">Bank</i>
+          <i className="label">Account</i>
           <input
             type="text"
-            className="inp_style  disabled:bg-gray-300"
+            className="inp_style  disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
             disabled
             {...register('to.bankAccount', {
               required: 'Please Enter account',
@@ -69,7 +69,7 @@ export default function TransactionToFiatDisabled({ banks }: Props) {
           <i className="won"></i>
           <input
             type="text"
-            className="inp_style disabled:bg-gray-300"
+            className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
             {...register('to.bankAmount')}
             readOnly
             disabled
@@ -77,7 +77,9 @@ export default function TransactionToFiatDisabled({ banks }: Props) {
           <span>KRW</span>
         </div>
       </div>
-      <div className="cont_box text-[#ff0000]">NO FIAT AVAILABLE</div>
+      <div className="cont_box text-red-500 leading-[20px] text-[13px]">
+        NO FIAT AVAILABLE
+      </div>
     </div>
   );
 }

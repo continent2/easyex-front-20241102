@@ -32,7 +32,7 @@ export default function DepositFiatForm({
     watch,
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useFormContext<DepositFiatFormValue>();
 
   const activeBankIndex = watch('activeBankIndex');
@@ -54,7 +54,7 @@ export default function DepositFiatForm({
                 <h3>From</h3>
                 <div className="inp_txt">
                   <div className="money_inp">
-                    <i className="label !min-w-0">BANK</i>
+                    <i className="label !min-w-0">Account</i>
                     <ImageSelect
                       className="z-10"
                       options={banks?.map((bank, index) => ({
@@ -131,7 +131,7 @@ export default function DepositFiatForm({
                 <h3>TO</h3>
                 <div className="inp_txt">
                   <div className="money_inp ">
-                    <i className="label !min-w-0">BANK</i>
+                    <i className="label !min-w-0">Account</i>
                     <ImageSelect
                       className="z-10"
                       options={adminBankAccounts?.map(
@@ -164,7 +164,9 @@ export default function DepositFiatForm({
               </div>
             </div>
             <div className="btn_box">
-              <button>Request</button>
+              <button className="disabled:!bg-gray-300" disabled={!isValid}>
+                Request
+              </button>
             </div>
             <div className="mt-8 mb-[15px] text-black text-center">
               &quot;*{depositPolicy}*&quot;

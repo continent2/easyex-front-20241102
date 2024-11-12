@@ -61,6 +61,7 @@ export default function DepositPage() {
       activeAdminAccountIndex: 0,
       activeBankIndex: 0,
     },
+    mode: 'onChange',
   });
 
   const { openModal } = useModal();
@@ -120,6 +121,7 @@ export default function DepositPage() {
       activeCryptoIndex: 0,
       activeAdminCryptoAccountIndex: 0,
     },
+    mode: 'onChange',
   });
 
   const { data: cryptos } = useQuery({

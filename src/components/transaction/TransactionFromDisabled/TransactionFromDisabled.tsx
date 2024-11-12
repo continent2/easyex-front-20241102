@@ -71,7 +71,7 @@ export default function TransactionFromDisabled({ cryptos }: Props) {
             )}
             <input
               type="text"
-              className="inp_style disabled:bg-gray-300"
+              className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
               disabled
               {...register('from.amount', {
                 validate: (amount) => {
@@ -86,7 +86,9 @@ export default function TransactionFromDisabled({ cryptos }: Props) {
           </div>
         </div>
       </div>
-      <div className="cont_box text-[#ff0000]">NO BALANCES</div>
+      <div className="cont_box text-red-500 leading-[20px] text-[13px]">
+        NO BALANCES
+      </div>
     </div>
   );
 }

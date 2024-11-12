@@ -28,7 +28,7 @@ export default function TransactionToFiat({ banks }: Props) {
       </h3>
       <div className="flex flex-col gap-2">
         <div className="money_inp ">
-          <i className="label !min-w-0">BANK</i>
+          <i className="label !min-w-0">Account</i>
           {banks && (
             <ImageSelect
               className="z-10"
@@ -46,7 +46,7 @@ export default function TransactionToFiat({ banks }: Props) {
           )}
         </div>
         <div className="money_inp in_alert">
-          <i className="label">Bank</i>
+          <i className="label">Account</i>
           <input
             type="text"
             className="inp_style"
