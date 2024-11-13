@@ -61,4 +61,5 @@ export const serverErrorMessages = {
   'NOT-ENOUGH-TIME-ELAPSED-SINCE-LAST-VERIFY-FAIL':
     'Not enough time elapsed since last verification fail',
   'TOKEN-EXPIRED': 'Session token expired',
+  'VERIFY-EMAIL-AGAIN': 'Verify email again',
 };

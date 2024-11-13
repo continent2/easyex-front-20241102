@@ -85,6 +85,7 @@ export default function JoinPage() {
     mutationFn: sendEmailVerifyCode,
     onSuccess: (response: any) => {
       if (response?.data?.status === 'OK') {
+        setIsVerifyEmail(false);
         openModal({
           title: 'Success',
           content: ' ENTER VERIFY CODE YOU RECEIVED',
@@ -127,6 +128,7 @@ export default function JoinPage() {
     mutationFn: sendPhoneVerifyCode,
     onSuccess: (response: any) => {
       if (response?.data?.status === 'OK') {
+        setIsVerifyPhone(false);
         openModal({
           title: 'Success',
           content: ' ENTER VERIFY CODE YOU RECEIVED',
