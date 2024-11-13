@@ -25,12 +25,9 @@ export type JoinFormValue = {
 export default function JoinPage() {
   const joinForm = useForm<JoinFormValue>({
     criteriaMode: 'firstError',
-    defaultValues: {
-      email: '',
-      phonecountrycode2letter: '',
-      phonenationalnumber: '',
-    },
+    mode: 'all',
   });
+
   const { handleSubmit, watch, trigger } = joinForm;
   const [isVerifyEmail, setIsVerifyEmail] = useState(false);
   const [isVerifyPhone, setIsVerifyPhone] = useState(false);
@@ -90,7 +87,7 @@ export default function JoinPage() {
       if (response?.data?.status === 'OK') {
         openModal({
           title: 'Success',
-          content: ' Verify code has been sent to the provided email.',
+          content: ' ENTER VERIFY CODE YOU RECEIVED',
           isVisibleOkBtn: true,
         });
       }
@@ -132,7 +129,7 @@ export default function JoinPage() {
       if (response?.data?.status === 'OK') {
         openModal({
           title: 'Success',
-          content: ' Verify code has been sent to the provided phone.',
+          content: ' ENTER VERIFY CODE YOU RECEIVED',
           isVisibleOkBtn: true,
         });
       }

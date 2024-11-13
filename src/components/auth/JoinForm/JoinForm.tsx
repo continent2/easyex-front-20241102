@@ -2,6 +2,8 @@ import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { Autocomplete, Box, TextField } from '@mui/material';
 
+import { JoinFormValue } from '@/pages/auth/JoinPage';
+
 import { countries } from '@/constants/countries';
 
 type Props = {
@@ -24,8 +26,16 @@ export default function JoinForm({
   const {
     register,
     watch,
-    formState: { errors },
-  } = useFormContext();
+    setValue,
+    getFieldState,
+    formState: { errors, isValid },
+  } = useFormContext<JoinFormValue>();
+
+  const emailState = getFieldState('email');
+  const emailVerifyCodeState = getFieldState('emailVerifyCode');
+  const phonecountrycode2letterState = getFieldState('phonecountrycode2letter');
+  const phonenationalnumberState = getFieldState('phonenationalnumber');
+  const phoneVerifyCodeState = getFieldState('phoneVerifyCode');
 
   return (
     <div className="auth-box m-column">
@@ -42,7 +52,7 @@ export default function JoinForm({
                   required: 'Please Enter email',
                   pattern: {
                     value: /\S+@\S+\.\S+/,
-                    message: 'Invalid email',
+                    message: 'Invalid email address',
                   },
                 })}
               />
@@ -53,8 +63,8 @@ export default function JoinForm({
               />
             </div>
             <button
-              disabled={isVerifyEmail}
-              className="mini-btn"
+              // disabled={!emailState.isDirty || emailState.invalid}
+              className="mini-btn disabled:!bg-gray-300 disabled:!text-white"
               type="button"
               onClick={onSendEmailVerifyCode}
             >
@@ -67,6 +77,12 @@ export default function JoinForm({
                 readOnly={isVerifyEmail}
                 disabled={isVerifyEmail}
                 className="inp_style"
+                onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  event.target.value = event.target.value.replace(
+                    /[^0-9]/g,
+                    '',
+                  );
+                }}
                 {...register('emailVerifyCode', {
                   required: 'Please Enter email verify code',
                 })}
@@ -78,8 +94,10 @@ export default function JoinForm({
               />
             </div>
             <button
-              disabled={isVerifyEmail}
-              className="mini-btn"
+              // disabled={
+              //   !emailVerifyCodeState.isDirty || emailVerifyCodeState.invalid
+              // }
+              className="mini-btn disabled:!bg-gray-300 disabled:!text-white"
               type="button"
               onClick={onVerifyEmailVerifyCode}
             >
@@ -122,6 +140,10 @@ export default function JoinForm({
                 </Box>
                 <Autocomplete
                   disabled={isVerifyPhone}
+                  onChange={(_, value) => {
+                    if (value) setValue('phonecountrycode2letter', value.code);
+                    else setValue('phonecountrycode2letter', '');
+                  }}
                   value={countries.find(
                     (option) =>
                       option.code === watch('phonecountrycode2letter'),
@@ -144,7 +166,6 @@ export default function JoinForm({
                     width: '100%',
                     '& fieldset': { border: 'none' },
                   }}
-                  disableClearable
                   options={countries}
                   autoHighlight
                   getOptionLabel={(option) => option.code}
@@ -194,6 +215,13 @@ export default function JoinForm({
                 className="inp_style"
                 readOnly={isVerifyPhone}
                 disabled={isVerifyPhone}
+                placeholder="NUMBERS ONLY"
+                onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  event.target.value = event.target.value.replace(
+                    /[^0-9]/g,
+                    '',
+                  );
+                }}
                 {...register('phonenationalnumber', {
                   required: 'Please enter phon number',
                 })}
@@ -205,9 +233,14 @@ export default function JoinForm({
               />
             </div>
             <button
-              className="mini-btn"
               type="button"
-              disabled={isVerifyPhone}
+              // disabled={
+              //   !watch('phonecountrycode2letter') ||
+              //   phonecountrycode2letterState.invalid ||
+              //   !phonenationalnumberState.isDirty ||
+              //   phonenationalnumberState.invalid
+              // }
+              className="mini-btn disabled:!bg-gray-300 disabled:!text-white"
               onClick={onSendPhoneVerifyCode}
             >
               Request code
@@ -219,6 +252,12 @@ export default function JoinForm({
                 readOnly={isVerifyPhone}
                 disabled={isVerifyPhone}
                 className="inp_style"
+                onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  event.target.value = event.target.value.replace(
+                    /[^0-9]/g,
+                    '',
+                  );
+                }}
                 {...register('phoneVerifyCode', {
                   required: 'Please Enter phone verify code',
                 })}
@@ -230,9 +269,11 @@ export default function JoinForm({
               />
             </div>
             <button
-              disabled={isVerifyPhone}
-              className="mini-btn"
               type="button"
+              // disabled={
+              //   phoneVerifyCodeState.invalid || !phoneVerifyCodeState.isDirty
+              // }
+              className="mini-btn disabled:!bg-gray-300 disabled:!text-white"
               onClick={onVerifyPhoneVerifyCode}
             >
               Verify code
@@ -262,11 +303,18 @@ export default function JoinForm({
         </div>
 
         <div className="btn_box">
-          <button className="w100-btn">Join</button>
-          <div className="opt-btns">
-            <button type="button" className="opt-btn">
+          <button
+            className="w100-btn disabled:!bg-gray-300"
+            disabled={!isValid}
+          >
+            Join
+          </button>
+          <div className="opt-btns flex !justify-center items-center">
+            <a href="/login" className="text-[18px]">
               Login
-            </button>
+            </a>
+            {/* <button type="button" className="opt-btn">
+              </button> */}
           </div>
         </div>
       </div>

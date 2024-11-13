@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import clsx from 'clsx';
 import useScrollPosition from '@react-hook/window-scroll';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -105,16 +106,52 @@ export default function Header() {
           <div className="Gnb pcVer">
             <ul>
               <li>
-                <a href="/deposit">Deposit</a>
+                <a
+                  className={clsx(
+                    location.pathname === '/deposit'
+                      ? '!text-[19px] !text-black'
+                      : ' ',
+                  )}
+                  href="/deposit"
+                >
+                  Deposit
+                </a>
               </li>
               <li>
-                <a href="/withdraw">Withdraw</a>
+                <a
+                  className={clsx(
+                    location.pathname === '/withdraw'
+                      ? '!text-[19px] !text-black'
+                      : ' ',
+                  )}
+                  href="/withdraw"
+                >
+                  Withdraw
+                </a>
               </li>
               <li>
-                <a href="/my/activity">Activity</a>
+                <a
+                  className={clsx(
+                    location.pathname === '/my/activity'
+                      ? '!text-[19px] !text-black'
+                      : ' ',
+                  )}
+                  href="/my/activity"
+                >
+                  Activity
+                </a>
               </li>
               <li>
-                <a href="/my/balances">Balances</a>
+                <a
+                  className={clsx(
+                    location.pathname === '/my/balances'
+                      ? '!text-[19px] !text-black'
+                      : ' ',
+                  )}
+                  href="/my/balances"
+                >
+                  Balances
+                </a>
               </li>
             </ul>
             <div className="a_box">
@@ -123,9 +160,27 @@ export default function Header() {
                   logout
                 </a>
               ) : (
-                <a href="/login">Login</a>
+                <a
+                  className={clsx(
+                    location.pathname === '/login'
+                      ? '!text-[15px] !text-black'
+                      : ' ',
+                  )}
+                  href="/login"
+                >
+                  Login
+                </a>
               )}
-              <a href="/join">join</a>
+              <a
+                className={clsx(
+                  location.pathname === '/join'
+                    ? '!text-[15px] !text-black'
+                    : ' ',
+                )}
+                href="/join"
+              >
+                join
+              </a>
             </div>
           </div>
           <div className="mobVer nav_open">

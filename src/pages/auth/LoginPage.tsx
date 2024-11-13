@@ -110,7 +110,7 @@ export default function LoginPage() {
       if (response?.data?.status === 'OK') {
         openModal({
           title: 'Success',
-          content: 'Verify code has been sent to the provided email.',
+          content: 'ENTER VERIFY CODE YOU RECEIVED',
           isVisibleOkBtn: true,
         });
       }
@@ -130,7 +130,7 @@ export default function LoginPage() {
       if (response?.data?.status === 'OK') {
         openModal({
           title: 'Success',
-          content: 'Verify code has been sent to the provided phone.',
+          content: 'ENTER VERIFY CODE YOU RECEIVED',
           isVisibleOkBtn: true,
         });
       }
