@@ -285,6 +285,7 @@ export default function JoinForm({
             <input
               type="password"
               className="inp_style"
+              placeholder="7 CHARACTERS OR MORE, AT LEAST 1 NUMERIC, AT LEAST 1 ALPHABET, CASE SENSITIVE"
               {...register('pw', {
                 required: 'Please Enter password',
                 pattern: {
@@ -301,7 +302,6 @@ export default function JoinForm({
             />
           </div>
         </div>
-
         <div className="btn_box">
           <button
             className="w100-btn disabled:!bg-gray-300"
