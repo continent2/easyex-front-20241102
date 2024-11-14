@@ -104,6 +104,7 @@ export default function LoginForm({
                 className="mini-btn disabled:!bg-gray-300 disabled:!text-white"
                 type="button"
                 onClick={onSendEmailVerifyCode}
+                disabled={isInputPhone}
                 // disabled={!emailState.isDirty || emailState.invalid}
               >
                 Request code
@@ -300,6 +301,7 @@ export default function LoginForm({
                 className="mini-btn disabled:!bg-gray-300 disabled:!text-white"
                 type="button"
                 onClick={onSendPhoneVerifyCode}
+                disabled={isInputEmail}
                 // disabled={
                 //   !watch('phonecountrycode2letter') ||
                 //   phonecountrycode2letterState.invalid ||

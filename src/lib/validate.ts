@@ -6,7 +6,7 @@ const symbolMap: Record<string, string> = {
   BTC: 'BTC',
   'USDT@TRON': 'TRON',
   'USDT@BNB': 'BNB',
-  'USDT@POLYGON': 'POLYGON',
+  'USDT@POLYGON': 'USDT',
 };
 
 export const validateCrypto = (account: string, symbol: string) => {
