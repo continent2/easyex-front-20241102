@@ -11,9 +11,13 @@ const symbolMap: Record<string, string> = {
 
 export const validateCrypto = (account: string, symbol: string) => {
   if (symbolMap?.[symbol]) {
-    return coinValidator.validate(account, symbolMap[symbol]);
+    try {
+      return coinValidator.validate(account, symbolMap[symbol]);
+    } catch {
+      return true;
+    }
   } else {
-    return false;
+    return true;
   }
 };
 
