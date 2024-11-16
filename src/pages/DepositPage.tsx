@@ -238,9 +238,6 @@ export default function DepositPage() {
     if (fromAccount && !/^[a-zA-Z0-9]+$/.test(fromAccount)) {
       depositCryptoFormSetValue('fromAccount', fromAccount.slice(0, -1));
     }
-    if (fromAmount && !/^[\d.]+$/.test(fromAmount)) {
-      depositCryptoFormSetValue('fromAmount', fromAmount.slice(0, -1));
-    }
 
     if (fromTxhash && !/^[a-zA-Z0-9]+$/.test(fromTxhash)) {
       depositCryptoFormSetValue('fromTxhash', fromTxhash.slice(0, -1));

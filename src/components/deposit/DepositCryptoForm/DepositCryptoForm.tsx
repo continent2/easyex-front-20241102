@@ -176,6 +176,19 @@ export default function DepositCryptoForm({
               <input
                 type="text"
                 className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+                onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = (event.target.value = event.target.value
+                    .replace(/[^0-9.]/g, '')
+                    .replace(/(\..*?)\./g, '$1')
+                    .replace(/^\./, ''));
+
+                  const numericValue = parseFloat(value);
+                  if (!isNaN(numericValue)) {
+                    if (numericValue > activeCrypto?.maxdeposit) {
+                      event.target.value = activeCrypto?.maxdeposit;
+                    }
+                  }
+                }}
                 {...register('fromAmount', {
                   validate: (fromAmount) => {
                     if (watch('fromTxhash')) {
@@ -184,6 +197,14 @@ export default function DepositCryptoForm({
                     if (!fromAmount) {
                       return 'Please enter amount';
                     }
+
+                    if (
+                      Number(fromAmount) < Number(activeCrypto?.mindeposit) ||
+                      Number(fromAmount) > Number(activeCrypto?.maxdeposit)
+                    ) {
+                      return `Out of bounds`;
+                    }
+
                     return (
                       validatePositiveDecimal(fromAmount) || 'Invalid amount'
                     );
@@ -205,8 +226,12 @@ export default function DepositCryptoForm({
                 ))
               }
             />
+            <div className="mt-4">
+              MIN: {activeCrypto?.mindeposit} MAX: {activeCrypto?.maxdeposit}
+            </div>
           </div>
         </div>
+
         <div className="cont_box flexBox area02 ver_noList m-column">
           <div className="inp_tit">
             <h3>txhash</h3>
