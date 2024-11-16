@@ -1,3 +1,4 @@
+import { env } from '@/env';
 import { defaultAxios } from '@/lib/api/apiClient';
 
 // 화폐 입금
@@ -46,4 +47,13 @@ export const depositCrypto = async (depositParams: {
   };
 }) => {
   return defaultAxios.post('/txs/deposit', depositParams);
+};
+
+// 입금 가능 쌍조회
+export const getDepositInfo = async () => {
+  return defaultAxios.get('/txs/deposit/info', {
+    params: {
+      nettype: env.netType,
+    },
+  });
 };

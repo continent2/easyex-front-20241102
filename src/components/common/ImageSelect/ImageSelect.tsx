@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 
 type Props = {
-  options?: { value: any; label: string; img: string }[];
+  options?: { value: any; label?: string; img?: string; disabled?: boolean }[];
   isVisibleLabel: boolean;
 } & SelectProps;
 
@@ -54,6 +54,7 @@ const ImageSelect = forwardRef<SelectProps, Props>(
             key={item.value}
             value={item.value}
             sx={{ display: 'flex', width: '100%', height: '30px' }}
+            disabled={item.disabled}
           >
             <ListItemIcon
               sx={{

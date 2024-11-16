@@ -9,22 +9,17 @@ import { DepositCryptoFormValue as depositCryptoFormValue } from '@/components/d
 import DepositFiatForm from '@/components/deposit/DepositFiatForm';
 import { DepositFiatFormValue as depositFiatFormValue } from '@/components/deposit/DepositFiatForm/DepositFiatForm';
 
-import { env } from '@/env';
 import { getAdminAccounts } from '@/lib/api/account';
 import { getBanks } from '@/lib/api/bank';
-import { getCryptos } from '@/lib/api/crypto';
 import {
   depositCrypto,
   depositFiat,
+  getDepositInfo,
   getDepositPolicy,
 } from '@/lib/api/deposit';
 import useModal from '@/lib/hooks/useModal';
 import { Bank } from '@/types/bank';
-import { Crypto } from '@/types/crypto';
-import {
-  AdminBankAccount as AdminBankAccount,
-  AdminCryptoAccount,
-} from '@/types/deposit';
+import { AdminBankAccount, DepositInfo } from '@/types/deposit';
 
 export default function DepositPage() {
   const [searchParams] = useSearchParams();
@@ -118,48 +113,31 @@ export default function DepositPage() {
   const depositCryptoForm = useForm<depositCryptoFormValue>({
     criteriaMode: 'all',
     defaultValues: {
-      activeCryptoIndex: 0,
-      activeAdminCryptoAccountIndex: 0,
+      activeDepositInfoIndex: 0,
     },
     mode: 'onChange',
   });
 
-  const { data: cryptos } = useQuery({
-    queryKey: ['cryptos', 'C'],
-    queryFn: () => getCryptos('C'),
-    select: (response) => response.data.list as Crypto[],
+  const { data: depositInfo } = useQuery({
+    queryKey: ['depositInfo'],
+    queryFn: getDepositInfo,
+    select: (response) => response.data.list as DepositInfo[],
     enabled: typecf === 'C',
   });
 
   useEffect(() => {
-    if (cryptos && symbolParm) {
-      const activeCryptoIndex = cryptos.findIndex(
-        (crypto) => crypto.symbol === symbolParm,
+    if (depositInfo && symbolParm) {
+      const activeDepositInfoIndex = depositInfo.findIndex(
+        (depositInfo) => depositInfo.from.symbol === symbolParm,
       );
-      if (activeCryptoIndex !== -1) {
-        depositCryptoForm.setValue('activeCryptoIndex', activeCryptoIndex);
+      if (activeDepositInfoIndex !== -1) {
+        depositCryptoForm.setValue(
+          'activeDepositInfoIndex',
+          activeDepositInfoIndex,
+        );
       }
     }
-  }, [cryptos]);
-
-  const activeCryptoSymbol =
-    cryptos?.[depositCryptoForm.watch('activeCryptoIndex')].symbol;
-
-  const { data: adminCryptoAccounts } = useQuery({
-    queryKey: ['adminCryptoAccounts', 'C', activeCryptoSymbol],
-    queryFn: () =>
-      getAdminAccounts({
-        typecf: 'C',
-        symbol: activeCryptoSymbol,
-        nettype: env.netType,
-      }),
-    select: (response) => response.data.list as AdminCryptoAccount[],
-    enabled: typecf === 'C' && !!activeCryptoSymbol,
-  });
-
-  useEffect(() => {
-    depositCryptoForm.setValue('activeAdminCryptoAccountIndex', 0);
-  }, [depositCryptoForm.watch('activeCryptoIndex')]);
+  }, [depositInfo, symbolParm]);
 
   const { mutate: depositCryptoMutate } = useMutation({
     mutationFn: depositCrypto,
@@ -180,14 +158,14 @@ export default function DepositPage() {
   const onSubmitDepositCryptoForm = (
     depositCryptoFormValue: depositCryptoFormValue,
   ) => {
-    if (!cryptos || !adminCryptoAccounts) return;
+    const { activeDepositInfoIndex } = depositCryptoFormValue;
 
-    const { activeCryptoIndex, activeAdminCryptoAccountIndex } =
-      depositCryptoFormValue;
+    const activeCrypto = depositInfo?.[activeDepositInfoIndex].from;
+    const activeAdminCryptoAccount = depositInfo?.[activeDepositInfoIndex].to;
 
-    const activeCrypto = cryptos[activeCryptoIndex];
-    const activeAdminCryptoAccount =
-      adminCryptoAccounts[activeAdminCryptoAccountIndex];
+    if (!activeCrypto || !activeAdminCryptoAccount) {
+      return;
+    }
 
     if (
       depositCryptoFormValue.fromAccount &&
@@ -209,7 +187,6 @@ export default function DepositPage() {
         },
       });
     }
-
     if (depositCryptoFormValue.fromTxhash) {
       depositCryptoMutate({
         typecf: 'C',
@@ -233,8 +210,7 @@ export default function DepositPage() {
   const depositCryptoFormWatchValues = depositCryptoFormWatch();
 
   useEffect(() => {
-    const { fromAccount, fromAmount, fromTxhash } =
-      depositCryptoFormWatchValues;
+    const { fromAccount, fromTxhash } = depositCryptoFormWatchValues;
     if (fromAccount && !/^[a-zA-Z0-9]+$/.test(fromAccount)) {
       depositCryptoFormSetValue('fromAccount', fromAccount.slice(0, -1));
     }
@@ -273,8 +249,7 @@ export default function DepositPage() {
         <FormProvider {...depositCryptoForm}>
           <div className="flexBox area02 ver_noList m-column">
             <DepositCryptoForm
-              cryptos={cryptos}
-              adminCryptoAccounts={adminCryptoAccounts}
+              depositInfo={depositInfo}
               depositPolicy={depositPolicy}
               onSubmitDepositCryptoForm={onSubmitDepositCryptoForm}
             />

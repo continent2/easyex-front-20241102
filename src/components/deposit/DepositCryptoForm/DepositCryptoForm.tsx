@@ -10,20 +10,17 @@ import {
   validateHex64Or66,
   validatePositiveDecimal,
 } from '@/lib/validate';
-import { Crypto } from '@/types/crypto';
-import { AdminCryptoAccount } from '@/types/deposit';
+import { DepositInfo } from '@/types/deposit';
 
 export type DepositCryptoFormValue = {
-  activeCryptoIndex: number;
+  activeDepositInfoIndex: number;
   fromAccount: string;
   fromAmount: string;
   fromTxhash: string;
-  activeAdminCryptoAccountIndex: number;
 };
 
 type Props = {
-  cryptos?: Crypto[];
-  adminCryptoAccounts?: AdminCryptoAccount[];
+  depositInfo?: DepositInfo[];
   depositPolicy?: string;
   onSubmitDepositCryptoForm: (
     depositCryptoFormValue: DepositCryptoFormValue,
@@ -31,8 +28,7 @@ type Props = {
 };
 
 export default function DepositCryptoForm({
-  cryptos,
-  adminCryptoAccounts,
+  depositInfo,
   depositPolicy,
   onSubmitDepositCryptoForm,
 }: Props) {
@@ -44,11 +40,10 @@ export default function DepositCryptoForm({
     formState: { errors, isValid },
   } = useFormContext<DepositCryptoFormValue>();
 
-  const activeCryptoIndex = watch('activeCryptoIndex');
-  const activeCrypto = cryptos?.[activeCryptoIndex];
-  const activeAdminCryptoAccountIndex = watch('activeAdminCryptoAccountIndex');
-  const activeAdminCryptoAccount =
-    adminCryptoAccounts?.[activeAdminCryptoAccountIndex];
+  const activeDepositInfoIndex = watch('activeDepositInfoIndex');
+  const activeDepositInfo = depositInfo?.[activeDepositInfoIndex];
+  const activeCrypto = activeDepositInfo?.from;
+  const activeAdminCryptoAccount = activeDepositInfo?.to;
 
   return (
     <div className="cont_box_wrp">
@@ -66,17 +61,19 @@ export default function DepositCryptoForm({
                 style={{ width: '100%' }}
               >
                 <ImageSelect
-                  options={cryptos?.map((crypto, index) => ({
-                    img: crypto.urllogo,
-                    label: crypto.symbol,
+                  options={depositInfo?.map((depositInfo, index) => ({
+                    img: depositInfo.from?.urllogo,
+                    label: depositInfo.from?.symbol,
                     value: index,
+                    disabled:
+                      depositInfo.to === null || depositInfo.to.active === 0,
                   }))}
                   isVisibleLabel={false}
                   className="z-10"
                   onChange={(e) =>
-                    setValue('activeCryptoIndex', e.target.value as number)
+                    setValue('activeDepositInfoIndex', e.target.value as number)
                   }
-                  value={activeCryptoIndex}
+                  value={activeDepositInfoIndex}
                 />
                 <textarea
                   className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
@@ -129,22 +126,19 @@ export default function DepositCryptoForm({
                 style={{ width: '100%' }}
               >
                 <ImageSelect
-                  options={adminCryptoAccounts?.map(
-                    (adminCryptoAccount, index) => ({
-                      img: adminCryptoAccount.urllogo,
-                      label: adminCryptoAccount.symbol,
-                      value: index,
-                    }),
-                  )}
+                  options={[
+                    {
+                      img: activeAdminCryptoAccount?.urllogo,
+                      label: activeAdminCryptoAccount?.symbol,
+                      value: activeDepositInfoIndex,
+                    },
+                  ]}
                   isVisibleLabel={false}
                   className="z-10"
                   onChange={(e) =>
-                    setValue(
-                      'activeAdminCryptoAccountIndex',
-                      e.target.value as number,
-                    )
+                    setValue('activeDepositInfoIndex', e.target.value as number)
                   }
-                  value={activeAdminCryptoAccountIndex}
+                  value={activeDepositInfoIndex}
                 />
                 <textarea
                   className="inp_style"
@@ -161,17 +155,17 @@ export default function DepositCryptoForm({
             <h3>Amount</h3>
             <div className="money_inp">
               <ImageSelect
-                options={cryptos?.map((cryptos, index) => ({
-                  img: cryptos.urllogo,
-                  label: cryptos.name,
+                options={depositInfo?.map((depositInfo, index) => ({
+                  img: depositInfo.from?.urllogo,
+                  label: depositInfo.from?.symbol,
                   value: index,
                 }))}
                 isVisibleLabel={false}
                 className="z-10"
                 onChange={(e) =>
-                  setValue('activeCryptoIndex', e.target.value as number)
+                  setValue('activeDepositInfoIndex', e.target.value as number)
                 }
-                value={activeCryptoIndex}
+                value={activeDepositInfoIndex}
               />
               <input
                 type="text"
@@ -184,8 +178,8 @@ export default function DepositCryptoForm({
 
                   const numericValue = parseFloat(value);
                   if (!isNaN(numericValue)) {
-                    if (numericValue > activeCrypto?.maxdeposit) {
-                      event.target.value = activeCrypto?.maxdeposit;
+                    if (numericValue > Number(activeCrypto?.maxdeposit)) {
+                      event.target.value = activeCrypto?.maxdeposit as string;
                     }
                   }
                 }}
@@ -237,17 +231,17 @@ export default function DepositCryptoForm({
             <h3>txhash</h3>
             <div className="money_inp">
               <ImageSelect
-                options={cryptos?.map((cryptos, index) => ({
-                  img: cryptos.urllogo,
-                  label: cryptos.name,
+                options={depositInfo?.map((depositInfo, index) => ({
+                  img: depositInfo.from?.urllogo,
+                  label: depositInfo.from?.symbol,
                   value: index,
                 }))}
                 isVisibleLabel={false}
                 className="z-10"
                 onChange={(e) =>
-                  setValue('activeCryptoIndex', e.target.value as number)
+                  setValue('activeDepositInfoIndex', e.target.value as number)
                 }
-                value={activeCryptoIndex}
+                value={activeDepositInfoIndex}
               />
               <input
                 type="text"
@@ -258,6 +252,7 @@ export default function DepositCryptoForm({
                     if (!!watch('fromAccount') || !!watch('fromAmount')) {
                       return true;
                     }
+
                     if (!fromTxhash) return 'Please Enter txhash';
                     return validateHex64Or66(fromTxhash) || 'Invalid txhash';
                   },
@@ -288,22 +283,19 @@ export default function DepositCryptoForm({
                 style={{ width: '100%' }}
               >
                 <ImageSelect
-                  options={adminCryptoAccounts?.map(
-                    (adminCryptoAccount, index) => ({
-                      img: adminCryptoAccount.urllogo,
-                      label: adminCryptoAccount.symbol,
-                      value: index,
-                    }),
-                  )}
+                  options={[
+                    {
+                      img: activeAdminCryptoAccount?.urllogo,
+                      label: activeAdminCryptoAccount?.symbol,
+                      value: activeDepositInfoIndex,
+                    },
+                  ]}
                   isVisibleLabel={false}
                   className="z-10"
                   onChange={(e) =>
-                    setValue(
-                      'activeAdminCryptoAccountIndex',
-                      e.target.value as number,
-                    )
+                    setValue('activeDepositInfoIndex', e.target.value as number)
                   }
-                  value={activeAdminCryptoAccountIndex}
+                  value={activeDepositInfoIndex}
                 />
                 <textarea
                   className="inp_style"
