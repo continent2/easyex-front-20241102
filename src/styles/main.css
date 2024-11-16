@@ -150,6 +150,10 @@
   display: inline-flex;
   align-items: center;
 }
+.money_inp[aria-disabled='true'] {
+  border-color: rgb(156, 163, 175);
+}
+
 .money_inp.ver_bg:after,
 .money_inp.ver_bg input {
   background: #f3f5fa;

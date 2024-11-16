@@ -125,6 +125,18 @@ export default function DepositPage() {
     enabled: typecf === 'C',
   });
 
+  // 에러 초기화
+  useEffect(() => {
+    depositCryptoForm.clearErrors('fromTxhash');
+  }, [
+    depositCryptoForm.watch('fromAccount'),
+    depositCryptoForm.watch('fromAmount'),
+  ]);
+  useEffect(() => {
+    depositCryptoForm.clearErrors(['fromAccount', 'fromAmount']);
+  }, [depositCryptoForm.watch('fromTxhash')]);
+
+  // account페이지에서 들어올때
   useEffect(() => {
     if (depositInfo && symbolParm) {
       const activeDepositInfoIndex = depositInfo.findIndex(

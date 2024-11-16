@@ -4,7 +4,9 @@ import { ErrorMessage } from '@hookform/error-message';
 import ImageSelect from '@/components/common/ImageSelect/ImageSelect';
 
 import ChangeImage from '@/assets/img/ico_change.png';
+import copyImage from '@/assets/img/ico-copy.png';
 
+import useModal from '@/lib/hooks/useModal';
 import {
   validateCrypto,
   validateHex64Or66,
@@ -45,6 +47,41 @@ export default function DepositCryptoForm({
   const activeCrypto = activeDepositInfo?.from;
   const activeAdminCryptoAccount = activeDepositInfo?.to;
 
+  const { openModal } = useModal();
+
+  const onCopyText = (text: string) => {
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        openModal({
+          title: 'Success',
+          content: 'Copied to clipboard.',
+          isVisibleOkBtn: true,
+        });
+      })
+      .catch((err) => {
+        try {
+          const textArea = document.createElement('textarea');
+          document.body.appendChild(textArea);
+          textArea.value = text;
+          textArea.select();
+          document.execCommand('copy');
+          document.body.removeChild(textArea);
+          openModal({
+            title: 'Success',
+            content: 'Copied to clipboard.',
+            isVisibleOkBtn: true,
+          });
+        } catch (err) {
+          openModal({
+            title: 'Copy Fail',
+            content: `${err}`,
+            isVisibleOkBtn: true,
+          });
+        }
+      });
+  };
+
   return (
     <div className="cont_box_wrp">
       <form onSubmit={handleSubmit(onSubmitDepositCryptoForm)}>
@@ -59,6 +96,7 @@ export default function DepositCryptoForm({
               <div
                 className="money_inp ver_textarea !px-[20px]"
                 style={{ width: '100%' }}
+                aria-disabled={!!watch('fromTxhash')}
               >
                 <ImageSelect
                   options={depositInfo?.map((depositInfo, index) => ({
@@ -76,7 +114,7 @@ export default function DepositCryptoForm({
                   value={activeDepositInfoIndex}
                 />
                 <textarea
-                  className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+                  className="inp_style disabled:bg-white"
                   style={{ height: '100%', resize: 'none' }}
                   disabled={!!watch('fromTxhash')}
                   {...register('fromAccount', {
@@ -146,6 +184,18 @@ export default function DepositCryptoForm({
                   value={activeAdminCryptoAccount?.address || ''}
                   readOnly
                 ></textarea>
+                {activeAdminCryptoAccount?.address && (
+                  <button
+                    className="copy-btn z-10 absolute bottom-1 right-1"
+                    onClick={() => {
+                      const copyText = activeAdminCryptoAccount?.address;
+                      onCopyText(copyText);
+                    }}
+                    type="button"
+                  >
+                    <img src={copyImage} alt="Copy" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
@@ -153,7 +203,7 @@ export default function DepositCryptoForm({
         <div className="cont_box flexBox area02 ver_noList m-column">
           <div className="inp_tit">
             <h3>Amount</h3>
-            <div className="money_inp">
+            <div className="money_inp" aria-disabled={!!watch('fromTxhash')}>
               <ImageSelect
                 options={depositInfo?.map((depositInfo, index) => ({
                   img: depositInfo.from?.urllogo,
@@ -169,7 +219,7 @@ export default function DepositCryptoForm({
               />
               <input
                 type="text"
-                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+                className="inp_style disabled:bg-white"
                 onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                   const value = (event.target.value = event.target.value
                     .replace(/[^0-9.]/g, '')
@@ -229,7 +279,10 @@ export default function DepositCryptoForm({
         <div className="cont_box flexBox area02 ver_noList m-column">
           <div className="inp_tit">
             <h3>txhash</h3>
-            <div className="money_inp">
+            <div
+              className="money_inp"
+              aria-disabled={!!watch('fromAccount') || !!watch('fromAmount')}
+            >
               <ImageSelect
                 options={depositInfo?.map((depositInfo, index) => ({
                   img: depositInfo.from?.urllogo,
@@ -245,7 +298,7 @@ export default function DepositCryptoForm({
               />
               <input
                 type="text"
-                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+                className="inp_style disabled:bg-white"
                 disabled={!!watch('fromAccount') || !!watch('fromAmount')}
                 {...register('fromTxhash', {
                   validate: (fromTxhash) => {
@@ -303,6 +356,18 @@ export default function DepositCryptoForm({
                   value={activeAdminCryptoAccount?.address || ''}
                   readOnly
                 ></textarea>
+                {activeAdminCryptoAccount?.address && (
+                  <button
+                    className="copy-btn z-10 absolute bottom-1 right-1"
+                    onClick={() => {
+                      const copyText = activeAdminCryptoAccount?.address;
+                      onCopyText(copyText);
+                    }}
+                    type="button"
+                  >
+                    <img src={copyImage} alt="Copy" />
+                  </button>
+                )}
               </div>
             </div>
           </div>
