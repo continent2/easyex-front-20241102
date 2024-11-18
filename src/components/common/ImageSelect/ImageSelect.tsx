@@ -42,7 +42,9 @@ const ImageSelect = forwardRef<SelectProps, Props>(
                 alignItems: 'center',
               }}
             >
-              <img src={data?.img} height={'25px'} alt={data?.label} />
+              {data?.img && (
+                <img src={data.img} height={'25px'} alt={data?.label} />
+              )}
               {isVisibleLabel && data?.label}
             </ListItemIcon>
           );
@@ -56,20 +58,23 @@ const ImageSelect = forwardRef<SelectProps, Props>(
             sx={{ display: 'flex', width: '100%', height: '30px' }}
             disabled={item.disabled}
           >
-            <ListItemIcon
-              sx={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <img
-                src={item.img}
-                width={'auto'}
-                height={'25px'}
-                alt={item.label}
-              />
-            </ListItemIcon>
+            {item?.img && (
+              <ListItemIcon
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <img
+                  src={item.img}
+                  width={'auto'}
+                  height={'25px'}
+                  alt={item.label}
+                />
+              </ListItemIcon>
+            )}
+
             <ListItemText>{item.label}</ListItemText>
           </MenuItem>
         ))}

@@ -54,7 +54,7 @@ export default function DepositPage() {
     criteriaMode: 'all',
     defaultValues: {
       activeAdminAccountIndex: 0,
-      activeBankIndex: 0,
+      activeBankIndex: -1,
     },
     mode: 'onChange',
   });

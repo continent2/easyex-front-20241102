@@ -54,17 +54,31 @@ export default function DepositFiatForm({
                 <h3>From</h3>
                 <div className="inp_txt">
                   <div className="money_inp">
-                    <i className="label !min-w-0">Account</i>
+                    <i className="label !min-w-0">BANK</i>
                     <ImageSelect
+                      placeholder="bank"
                       className="z-10"
-                      options={banks?.map((bank, index) => ({
-                        img: bank.urllogo,
-                        label: bank.banknameen,
-                        value: index,
-                      }))}
+                      options={[
+                        {
+                          label: 'SELECT',
+                          value: -1,
+                        },
+                      ].concat(
+                        banks?.map((bank, index) => ({
+                          img: bank.urllogo,
+                          label: bank.banknameen,
+                          value: index,
+                        })) || [],
+                      )}
                       value={activeBankIndex}
                       isVisibleLabel={true}
                       {...register('activeBankIndex', {
+                        validate: (activeBankIndex) => {
+                          if (activeBankIndex === -1) {
+                            return 'Please select bank';
+                          }
+                          return true;
+                        },
                         valueAsNumber: true,
                       })}
                     />
@@ -131,7 +145,7 @@ export default function DepositFiatForm({
                 <h3>TO</h3>
                 <div className="inp_txt">
                   <div className="money_inp ">
-                    <i className="label !min-w-0">Account</i>
+                    <i className="label !min-w-0">BANK</i>
                     <ImageSelect
                       className="z-10"
                       options={adminBankAccounts?.map(
@@ -155,7 +169,7 @@ export default function DepositFiatForm({
                       className="inp_style"
                       value={
                         adminBankAccounts?.[watch('activeAdminAccountIndex')]
-                          .number
+                          ?.number
                       }
                       readOnly
                     />
@@ -168,7 +182,7 @@ export default function DepositFiatForm({
                 Request
               </button>
             </div>
-            <div className="mt-8 mb-[15px] text-black text-center">
+            <div className="mt-8 mb-[15px] text-black">
               &quot;*{depositPolicy}*&quot;
             </div>
           </div>
