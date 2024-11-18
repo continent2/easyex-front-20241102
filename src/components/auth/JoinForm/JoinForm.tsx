@@ -4,6 +4,9 @@ import { Autocomplete, Box, TextField } from '@mui/material';
 
 import { JoinFormValue } from '@/pages/auth/JoinPage';
 
+import SnsLogin from '@/components/auth/SnsLogin';
+import PasswordInput from '@/components/common/PasswordInput';
+
 import { countries } from '@/constants/countries';
 
 type Props = {
@@ -27,15 +30,15 @@ export default function JoinForm({
     register,
     watch,
     setValue,
-    getFieldState,
+    // getFieldState,
     formState: { errors, isValid },
   } = useFormContext<JoinFormValue>();
 
-  const emailState = getFieldState('email');
-  const emailVerifyCodeState = getFieldState('emailVerifyCode');
-  const phonecountrycode2letterState = getFieldState('phonecountrycode2letter');
-  const phonenationalnumberState = getFieldState('phonenationalnumber');
-  const phoneVerifyCodeState = getFieldState('phoneVerifyCode');
+  // const emailState = getFieldState('email');
+  // const emailVerifyCodeState = getFieldState('emailVerifyCode');
+  // const phonecountrycode2letterState = getFieldState('phonecountrycode2letter');
+  // const phonenationalnumberState = getFieldState('phonenationalnumber');
+  // const phoneVerifyCodeState = getFieldState('phoneVerifyCode');
 
   return (
     <div className="auth-box m-column">
@@ -59,7 +62,11 @@ export default function JoinForm({
               <ErrorMessage
                 name="email"
                 errors={errors}
-                render={({ message }) => <p className="red_alert">{message}</p>}
+                render={({ message }) => (
+                  <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                    {message}
+                  </p>
+                )}
               />
             </div>
             <button
@@ -90,7 +97,11 @@ export default function JoinForm({
               <ErrorMessage
                 name="emailVerifyCode"
                 errors={errors}
-                render={({ message }) => <p className="red_alert">{message}</p>}
+                render={({ message }) => (
+                  <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                    {message}
+                  </p>
+                )}
               />
             </div>
             <button
@@ -104,9 +115,9 @@ export default function JoinForm({
               Verify code
             </button>
           </div>
-
           <div className="join-inp-grp01">
             <Box
+              className="lg:mb-[15px] sm:!mb-0"
               sx={{
                 width: '100%',
                 position: 'relative',
@@ -205,7 +216,11 @@ export default function JoinForm({
               <ErrorMessage
                 errors={errors}
                 name="phonecountrycode2letter"
-                render={({ message }) => <p className="red_alert">{message}</p>}
+                render={({ message }) => (
+                  <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                    {message}
+                  </p>
+                )}
               />
             </Box>
             <div className="money_inp">
@@ -229,7 +244,11 @@ export default function JoinForm({
               <ErrorMessage
                 errors={errors}
                 name="phonenationalnumber"
-                render={({ message }) => <p className="red_alert">{message}</p>}
+                render={({ message }) => (
+                  <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                    {message}
+                  </p>
+                )}
               />
             </div>
             <button
@@ -247,7 +266,7 @@ export default function JoinForm({
             </button>
           </div>
           <div className="join-inp-grp02">
-            <div className="money_inp">
+            <div className="money_inp relative">
               <input
                 readOnly={isVerifyPhone}
                 disabled={isVerifyPhone}
@@ -265,7 +284,11 @@ export default function JoinForm({
               <ErrorMessage
                 name="phoneVerifyCode"
                 errors={errors}
-                render={({ message }) => <p className="red_alert">{message}</p>}
+                render={({ message }) => (
+                  <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                    {message}
+                  </p>
+                )}
               />
             </div>
             <button
@@ -282,10 +305,7 @@ export default function JoinForm({
 
           <div className="money_inp password_inp">
             <i className="label">Password</i>
-            <input
-              type="password"
-              className="inp_style"
-              placeholder="7 CHARACTERS OR MORE, AT LEAST 1 NUMERIC, AT LEAST 1 ALPHABET, CASE SENSITIVE"
+            <PasswordInput
               {...register('pw', {
                 required: 'Please Enter password',
                 pattern: {
@@ -295,12 +315,21 @@ export default function JoinForm({
                 },
               })}
             />
-            <ErrorMessage
-              name="pw"
-              errors={errors}
-              render={({ message }) => <p className="red_alert">{message}</p>}
-            />
           </div>
+          <div className="text-[13px] leading-[20px]">
+            AT LEAST 7 CHARACTERS
+          </div>
+          <div className="text-[13px] leading-[20px]">AT LEAST 1 ALPHABET</div>
+          <div className="text-[13px] leading-[20px]">AT LEAST 1 NUMBER</div>
+          <ErrorMessage
+            name="pw"
+            errors={errors}
+            render={({ message }) => (
+              <p className="text-red-500 leading-[20px] text-[13px]">
+                {message}
+              </p>
+            )}
+          />
         </div>
         <div className="btn_box">
           <button
@@ -316,6 +345,9 @@ export default function JoinForm({
             {/* <button type="button" className="opt-btn">
               </button> */}
           </div>
+        </div>
+        <div className="btn_box">
+          <SnsLogin />
         </div>
       </div>
     </div>

@@ -6,6 +6,8 @@ import { Autocomplete, Box, TextField } from '@mui/material';
 
 import { LoginFormValues } from '@/pages/auth/LoginPage';
 
+import PasswordInput from '@/components/common/PasswordInput';
+
 import { countries } from '@/constants/countries';
 
 type Props = {
@@ -21,14 +23,14 @@ export default function LoginForm({
     watch,
     register,
     formState: { errors, isValid },
-    getFieldState,
+    // getFieldState,
     clearErrors,
     setValue,
   } = useFormContext<LoginFormValues>();
 
-  const emailState = getFieldState('email');
-  const phonecountrycode2letterState = getFieldState('phonecountrycode2letter');
-  const phonenationalnumberState = getFieldState('phonenationalnumber');
+  // const emailState = getFieldState('email');
+  // const phonecountrycode2letterState = getFieldState('phonecountrycode2letter');
+  // const phonenationalnumberState = getFieldState('phonenationalnumber');
 
   const isInputPhone =
     !!watch('phonePw') ||
@@ -77,10 +79,10 @@ export default function LoginForm({
         <div className="cont_box_wrp join-cont-box-wrap">
           <div className="join-inp-wrap">
             <div className="join-inp-grp02">
-              <div className="money_inp">
+              <div className="money_inp" aria-disabled={isInputPhone}>
                 <i className="label">Email</i>
                 <input
-                  className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+                  className="inp_style disabled:bg-white"
                   disabled={isInputPhone}
                   {...register('email', {
                     required: isInputPhone ? false : 'Please Enter email',
@@ -96,7 +98,9 @@ export default function LoginForm({
                   name="email"
                   errors={errors}
                   render={({ message }) => (
-                    <p className="red_alert">{message}</p>
+                    <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                      {message}
+                    </p>
                   )}
                 />
               </div>
@@ -111,7 +115,10 @@ export default function LoginForm({
               </button>
             </div>
             <div className="join-inp-grp02">
-              <div className="money_inp">
+              <div
+                className="money_inp"
+                aria-disabled={isInputPhone || !!watch('emailPw')}
+              >
                 <i className="label mr-[15px]">VerifyCode</i>
                 <input
                   disabled={isInputPhone || !!watch('emailPw')}
@@ -121,7 +128,7 @@ export default function LoginForm({
                       '',
                     );
                   }}
-                  className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  className="inp_style disabled:bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   {...register('emailVerifyCode', {
                     required:
                       isInputPhone || !!watch('emailPw')
@@ -133,16 +140,20 @@ export default function LoginForm({
                   name="emailVerifyCode"
                   errors={errors}
                   render={({ message }) => (
-                    <p className="red_alert">{message}</p>
+                    <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                      {message}
+                    </p>
                   )}
                 />
               </div>
             </div>
-            <div className="money_inp password_inp">
+            <div
+              className="money_inp password_inp"
+              aria-disabled={isInputPhone || !!watch('emailVerifyCode')}
+            >
               <i className="label">Password</i>
-              <input
-                type="password"
-                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+              <PasswordInput
+                className="disabled:bg-white"
                 autoComplete="current-password"
                 disabled={isInputPhone || !!watch('emailVerifyCode')}
                 {...register('emailPw', {
@@ -155,18 +166,27 @@ export default function LoginForm({
               <ErrorMessage
                 errors={errors}
                 name="emailPw"
-                render={({ message }) => <p className="red_alert">{message}</p>}
+                render={({ message }) => (
+                  <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                    {message}
+                  </p>
+                )}
               />
             </div>
             <div className="my-[35px] flex items-center justify-center">OR</div>
             {/* 휴대폰 */}
             <div className="join-inp-grp01">
               <Box
+                className="lg:mb-[15px] sm:!mb-0"
+                aria-disabled={isInputEmail}
                 sx={{
                   width: '100%',
                   position: 'relative',
                   borderRadius: '10px',
                   border: '2.5px solid transparent',
+                  '&[aria-disabled="true"]': {
+                    borderColor: 'rgb(156, 163, 175)',
+                  },
                   background:
                     'linear-gradient(90deg, #ecfbf8,#4cd4d2) border-box',
                   lineHeight: '56px',
@@ -251,15 +271,12 @@ export default function LoginForm({
                             ? false
                             : 'Please enter country',
                         })}
-                        disabled={isInputEmail}
                         inputProps={{
                           ...params.inputProps,
-                          className: clsx(
-                            'disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid',
-                            params.inputProps.className,
-                          ),
+                          className: clsx('', params.inputProps.className),
                           style: { paddingLeft: '90px' },
                         }}
+                        disabled={isInputEmail}
                       />
                     )}
                   />
@@ -268,15 +285,17 @@ export default function LoginForm({
                   errors={errors}
                   name="phonecountrycode2letter"
                   render={({ message }) => (
-                    <p className="red_alert">{message}</p>
+                    <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                      {message}
+                    </p>
                   )}
                 />
               </Box>
-              <div className="money_inp">
+              <div className="money_inp" aria-disabled={isInputEmail}>
                 <i className="label mr-[15px]">Phone number</i>
                 <input
                   type="text"
-                  className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+                  className="inp_style disabled:bg-white"
                   disabled={isInputEmail}
                   placeholder="NUMBERS ONLY"
                   onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
@@ -293,7 +312,9 @@ export default function LoginForm({
                   errors={errors}
                   name="phonenationalnumber"
                   render={({ message }) => (
-                    <p className="red_alert">{message}</p>
+                    <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                      {message}
+                    </p>
                   )}
                 />
               </div>
@@ -313,10 +334,13 @@ export default function LoginForm({
               </button>
             </div>
             <div className="join-inp-grp02">
-              <div className="money_inp">
+              <div
+                className="money_inp"
+                aria-disabled={isInputEmail || !!watch('phonePw')}
+              >
                 <i className="label mr-[15px]">VerifyCode</i>
                 <input
-                  className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+                  className="inp_style disabled:bg-white"
                   disabled={isInputEmail || !!watch('phonePw')}
                   onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                     event.target.value = event.target.value.replace(
@@ -335,16 +359,20 @@ export default function LoginForm({
                   name="phoneVerifyCode"
                   errors={errors}
                   render={({ message }) => (
-                    <p className="red_alert">{message}</p>
+                    <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                      {message}
+                    </p>
                   )}
                 />
               </div>
             </div>
-            <div className="money_inp password_inp">
+            <div
+              className="money_inp password_inp"
+              aria-disabled={isInputEmail || !!watch('phoneVerifyCode')}
+            >
               <i className="label">Password</i>
-              <input
-                type="password"
-                className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+              <PasswordInput
+                className="inp_style disabled:bg-white"
                 autoComplete="current-password"
                 disabled={isInputEmail || !!watch('phoneVerifyCode')}
                 {...register('phonePw', {
@@ -357,7 +385,11 @@ export default function LoginForm({
               <ErrorMessage
                 errors={errors}
                 name="phonePw"
-                render={({ message }) => <p className="red_alert">{message}</p>}
+                render={({ message }) => (
+                  <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                    {message}
+                  </p>
+                )}
               />
             </div>
           </div>
@@ -370,7 +402,7 @@ export default function LoginForm({
               Login
             </button>
             <div className="opt-btns flex !justify-center items-center">
-              <a href="/join" className="text-[18px]">
+              <a href="/join" className="text-[18px] underline">
                 Join
               </a>
               {/* <button type="button" className="opt-btn">

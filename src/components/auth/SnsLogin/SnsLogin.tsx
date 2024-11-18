@@ -20,22 +20,46 @@ export default function SnsLogin() {
   const onAppleLogin = () => {};
   return (
     <div className="sns-btns">
-      <button onClick={onNaverLogin} className="sns-btn sns-naver">
+      <button
+        disabled
+        // onClick={onNaverLogin}
+        className="sns-btn sns-naver opacity-30"
+      >
         <img src={SnsNaverImage} alt="" />
       </button>
-      <button onClick={onKakaoLogin} className="sns-btn sns-kakao">
+      <button
+        disabled
+        // onClick={onKakaoLogin}
+        className="sns-btn sns-kakao opacity-30"
+      >
         <img src={SnsKakaoImage} alt="" />
       </button>
-      <button onClick={onFacebookLogin} className="sns-btn sns-facebook">
+      <button
+        disabled
+        // onClick={onFacebookLogin}
+        className="sns-btn sns-facebook opacity-30"
+      >
         <img src={SnsFacebookImage} alt="" />
       </button>
-      <button onClick={onTwitterLogin} className="sns-btn sns-twitter">
+      <button
+        disabled
+        // onClick={onTwitterLogin}
+        className="sns-btn sns-twitter opacity-30"
+      >
         <img src={SnsTwitterImage} alt="" />
       </button>
-      <button onClick={onGoogleLogin} className="sns-btn sns-google">
+      <button
+        disabled
+        // onClick={onGoogleLogin}
+        className="sns-btn sns-google opacity-30"
+      >
         <img src={SnsGoogleImage} alt="" />
       </button>
-      <button onClick={onAppleLogin} className="sns-btn sns-apple">
+      <button
+        disabled
+        // onClick={onAppleLogin}
+        className="sns-btn sns-apple opacity-30"
+      >
         <img src={SnsAppleImage} alt="" />
       </button>
     </div>

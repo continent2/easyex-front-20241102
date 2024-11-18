@@ -284,15 +284,17 @@
 @media all and (max-width: 600px) {
   .join-inp-grp01 .money_inp:nth-child(2) {
     width: 100%;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
   }
 
   .mini-btn {
     width: 100%;
   }
 
+  .join-inp-grp01,
   .join-inp-grp02 {
     flex-wrap: wrap;
+    gap: 22px;
   }
 
   .code-inp-grp {
