@@ -56,9 +56,11 @@ export default function Header() {
                   logout
                 </a>
               ) : (
-                <a href="/login">Login</a>
+                <>
+                  <a href="/login">Login</a>
+                  <a href="/join">join</a>
+                </>
               )}
-              <a href="/join">join</a>
             </div>
             <div className="nav_open on">
               <a onClick={onToggleNav}>
@@ -160,27 +162,29 @@ export default function Header() {
                   logout
                 </a>
               ) : (
-                <a
-                  className={clsx(
-                    location.pathname === '/login'
-                      ? '!text-[15px] !text-black'
-                      : ' ',
-                  )}
-                  href="/login"
-                >
-                  Login
-                </a>
+                <>
+                  <a
+                    className={clsx(
+                      location.pathname === '/login'
+                        ? '!text-[15px] !text-black'
+                        : ' ',
+                    )}
+                    href="/login"
+                  >
+                    Login
+                  </a>
+                  <a
+                    className={clsx(
+                      location.pathname === '/join'
+                        ? '!text-[15px] !text-black'
+                        : ' ',
+                    )}
+                    href="/join"
+                  >
+                    join
+                  </a>
+                </>
               )}
-              <a
-                className={clsx(
-                  location.pathname === '/join'
-                    ? '!text-[15px] !text-black'
-                    : ' ',
-                )}
-                href="/join"
-              >
-                join
-              </a>
             </div>
           </div>
           <div className="mobVer nav_open">
