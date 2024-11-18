@@ -32,13 +32,26 @@ export default function TransactionToFiat({ banks }: Props) {
           {banks && (
             <ImageSelect
               className="z-10"
-              options={banks?.map((bank, index) => ({
-                img: bank.urllogo,
-                label: bank.banknameen,
-                value: index,
-              }))}
+              options={[
+                {
+                  label: 'SELECT',
+                  value: -1,
+                },
+              ].concat(
+                banks?.map((bank, index) => ({
+                  img: bank.urllogo,
+                  label: bank.banknameen,
+                  value: index,
+                })),
+              )}
               isVisibleLabel={true}
               {...register('to.activeBankIndex', {
+                validate: (activeBankIndex) => {
+                  if (activeBankIndex === -1) {
+                    return 'Please select bank';
+                  }
+                  return true;
+                },
                 valueAsNumber: true,
               })}
               value={ActiveBankIndex}

@@ -63,7 +63,7 @@ export default function WithdrawPage() {
       },
       to: {
         activeCryptoIndex: 0,
-        activeBankIndex: 0,
+        activeBankIndex: -1,
       },
     },
   });

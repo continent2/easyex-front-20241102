@@ -92,6 +92,23 @@ export default function TransactionFromAccount({
             <input
               type="text"
               className="inp_style"
+              onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                const value = (event.target.value = event.target.value
+                  .replace(/[^0-9.]/g, '')
+                  .replace(/(\..*?)\./g, '$1')
+                  .replace(/^\./, ''));
+
+                const numericValue = parseFloat(value);
+                if (!isNaN(numericValue)) {
+                  if (
+                    numericValue > Number(activeExchangeAllowedPair?.maxdeposit)
+                  ) {
+                    event.target.value =
+                      activeExchangeAllowedPair?.maxdeposit as string;
+                  }
+                }
+              }}
+              // placeholder={activeExchangeAllowedPair}
               {...register('from.amount', {
                 validate: (amount) => {
                   if (!amount) {
@@ -103,14 +120,14 @@ export default function TransactionFromAccount({
                       Number(amount) <
                       Number(activeExchangeAllowedPair.minwithdrawamount)
                     ) {
-                      return `Minimum withdrawal amount is ${activeExchangeAllowedPair.minwithdrawamount}`;
+                      return `Out of bounds`;
                     }
 
                     if (
                       Number(amount) >
                       Number(activeExchangeAllowedPair.maxwithdrawamount)
                     ) {
-                      return `Maximum withdrawal amount is ${activeExchangeAllowedPair.maxwithdrawamount}`;
+                      return `Out of bounds`;
                     }
                   }
 
