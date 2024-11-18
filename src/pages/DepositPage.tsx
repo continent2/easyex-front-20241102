@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
+import dayjs from 'dayjs';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import CryptoFiatToggleGroup from '@/components/common/CryptoFiatToggleGroup';
@@ -64,7 +65,7 @@ export default function DepositPage() {
     mutationFn: depositFiat,
     onSuccess: (response) => {
       openModal({
-        title: response.data.message,
+        title: `${response.data.message} ${dayjs().format('YYYY-MM-DD HH:mm:ss')}`,
         content: (
           <>
             <div>{response.data.expiry - new Date().getTime() / 1000}</div>
@@ -155,7 +156,7 @@ export default function DepositPage() {
     mutationFn: depositCrypto,
     onSuccess: (response) => {
       openModal({
-        title: response.data.message,
+        title: `${response.data.message} ${dayjs().format('YYYY-MM-DD HH:mm:ss')}`,
         content: (
           <>
             <div>{response.data.expiry - new Date().getTime() / 1000}</div>
