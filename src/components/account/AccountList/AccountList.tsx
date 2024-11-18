@@ -1,6 +1,5 @@
 import ArrowLeftStartOnImage from '@/assets/img/ico_arrow_left_start_on.svg';
 import ArrowRightStartOnImage from '@/assets/img/ico_arrow_right_start_on.svg';
-import BitImage from '@/assets/img/ico_bit.png';
 import DownImage from '@/assets/img/ico_down.svg';
 import UpImage from '@/assets/img/ico_up.svg';
 
@@ -11,6 +10,7 @@ type Props = {
   accounts?: Account[];
   currentPage: number;
   totalPages: number;
+  totalCount?: number;
   onChangeOrder: ({
     orderKey,
     order,
@@ -28,6 +28,7 @@ export default function AccountList({
   accounts,
   currentPage,
   totalPages,
+  totalCount,
   onChangeOrder,
   onChangeFilterval,
   onChangePage,
@@ -74,7 +75,9 @@ export default function AccountList({
           </div>
         </div> */}
       </div>
-
+      <div className="mb-[15px] lg:w-[90%] lg:mx-auto">
+        Total currency: {totalCount}
+      </div>
       <div className="cont_box_wrp tbl-cont-box-wrap">
         <div className="tbl-wrap">
           <table className="tbl">

@@ -78,6 +78,7 @@ export default function BalancesPage() {
         accounts={accounts}
         currentPage={currentPage}
         totalPages={totalPages}
+        totalCount={orderPageNation?.payload.count}
         onChangeOrder={onChangeOrder}
         onChangeFilterval={onChangeFilterval}
         onChangePage={onChangePage}
