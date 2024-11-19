@@ -366,6 +366,7 @@ export default function WithdrawPage() {
                     // 계좌 있을때
                     <TransactionFromAccount
                       accounts={accounts}
+                      exchangeAllowedPairs={exchangeAllowedPairs}
                       activeExchangeAllowedPair={activeExchangeAllowedPair}
                     />
                   ) : (

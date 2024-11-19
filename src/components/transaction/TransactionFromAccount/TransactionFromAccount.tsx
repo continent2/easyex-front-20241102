@@ -11,11 +11,13 @@ import { Account } from '@/types/account';
 
 type Props = {
   accounts?: Account[];
+  exchangeAllowedPairs?: any;
   activeExchangeAllowedPair: any;
 };
 
 export default function TransactionFromAccount({
   accounts,
+  exchangeAllowedPairs,
   activeExchangeAllowedPair,
 }: Props) {
   const {
@@ -108,7 +110,7 @@ export default function TransactionFromAccount({
                   }
                 }
               }}
-              // placeholder={activeExchangeAllowedPair}
+              placeholder={safeToLocaleString(activeAccount?.balancefloat)}
               {...register('from.amount', {
                 validate: (amount) => {
                   if (!amount) {
