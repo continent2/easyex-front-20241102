@@ -27,23 +27,30 @@ export default function TransactionToFiatDisabled({ banks }: Props) {
         TO
       </h3>
       <div className="flex flex-col gap-2">
-        <div className="money_inp" aria-disabled>
-          <i className="label !min-w-0">Account</i>
-          {/* {banks && (
+        <div className="money_inp">
+          <i className="label !min-w-0">Bank</i>
+          {banks && (
             <ImageSelect
               className="z-10"
-              options={banks?.map((bank, index) => ({
-                img: bank.urllogo,
-                label: bank.banknameen,
-                value: index,
-              }))}
+              options={[
+                {
+                  label: 'SELECT',
+                  value: -1,
+                },
+              ].concat(
+                banks?.map((bank, index) => ({
+                  img: bank.urllogo,
+                  label: bank.banknameen,
+                  value: index,
+                })),
+              )}
               isVisibleLabel={true}
               {...register('to.activeBankIndex', {
                 valueAsNumber: true,
               })}
               value={ActiveBankIndex}
             />
-          )} */}
+          )}
         </div>
         <div className="money_inp in_alert" aria-disabled>
           <i className="label">Account</i>
