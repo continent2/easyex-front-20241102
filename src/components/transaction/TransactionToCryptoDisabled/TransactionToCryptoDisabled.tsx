@@ -31,7 +31,10 @@ export default function TransactionToCryptoDisabled({ cryptos }: Props) {
         <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
           Account
         </h3>
-        <div className="money_inp ver_textarea !px-[20px] relative !overflow-visible">
+        <div
+          className="money_inp ver_textarea !px-[20px] relative !overflow-visible"
+          aria-disabled
+        >
           {cryptos && (
             <ImageSelect
               options={cryptos?.map((crypto, index) => ({
@@ -46,7 +49,7 @@ export default function TransactionToCryptoDisabled({ cryptos }: Props) {
             />
           )}
           <textarea
-            className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+            className="inp_style disabled:bg-white"
             disabled
             style={{ height: '100%', resize: 'none' }}
             {...register('to.cryptoAccount', {
@@ -71,7 +74,7 @@ export default function TransactionToCryptoDisabled({ cryptos }: Props) {
           <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
             Amount
           </h3>
-          <div className="money_inp  ">
+          <div className="money_inp" aria-disabled>
             {cryptos && (
               <ImageSelect
                 options={cryptos?.map((crypto, index) => ({
@@ -87,7 +90,7 @@ export default function TransactionToCryptoDisabled({ cryptos }: Props) {
             )}
             <input
               type="text"
-              className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+              className="inp_style disabled:bg-white"
               disabled
               {...register('to.cryptoAmount')}
               readOnly

@@ -55,7 +55,7 @@ export default function TransactionFromDisabled({ cryptos }: Props) {
           <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px] ">
             Amount
           </h3>
-          <div className="money_inp">
+          <div className="money_inp" aria-disabled={true}>
             {cryptos && (
               <ImageSelect
                 options={cryptos?.map((crypto, index) => ({
@@ -71,7 +71,7 @@ export default function TransactionFromDisabled({ cryptos }: Props) {
             )}
             <input
               type="text"
-              className="inp_style disabled:border-2 disabled:border-gray-400 disabled:bg-white disabled:border-solid"
+              className="inp_style disabled:bg-white"
               disabled
               {...register('from.amount', {
                 validate: (amount) => {

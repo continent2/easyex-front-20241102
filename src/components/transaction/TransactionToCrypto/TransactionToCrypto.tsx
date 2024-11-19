@@ -75,7 +75,7 @@ export default function TransactionToCrypto({ cryptos }: Props) {
           <h3 className="text-[#15a7a5] uppercase tracking-[-0.5px] font-extrabold text-[18px] mb-[10px]">
             Amount
           </h3>
-          <div className="money_inp  ">
+          <div className="money_inp">
             {cryptos && (
               <ImageSelect
                 options={cryptos?.map((crypto, index) => ({
