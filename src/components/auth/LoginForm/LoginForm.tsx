@@ -6,6 +6,7 @@ import { Autocomplete, Box, TextField } from '@mui/material';
 
 import { LoginFormValues } from '@/pages/auth/LoginPage';
 
+import SnsLogin from '@/components/auth/SnsLogin';
 import PasswordInput from '@/components/common/PasswordInput';
 
 import { countries } from '@/constants/countries';
@@ -408,6 +409,9 @@ export default function LoginForm({
               {/* <button type="button" className="opt-btn">
               </button> */}
             </div>
+          </div>
+          <div className="btn_box">
+            <SnsLogin />
           </div>
         </div>
       </div>
