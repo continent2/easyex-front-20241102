@@ -8,6 +8,7 @@ export const getAccounts = async ({
   order,
   filterkey,
   filterval,
+  includenonexistent,
 }: {
   offset?: number;
   limit?: number;
@@ -15,6 +16,7 @@ export const getAccounts = async ({
   order?: 'ASC' | 'DESC';
   filterkey?: string;
   filterval?: string;
+  includenonexistent?: number;
 }) => {
   return defaultAxios.get(
     `/queriesauth/rows/useraccounts/active/1/${offset}/${limit}/${orderKey}/${order}`,
@@ -22,6 +24,7 @@ export const getAccounts = async ({
       params: {
         filterkey,
         filterval,
+        includenonexistent,
       },
     },
   );

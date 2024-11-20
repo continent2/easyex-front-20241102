@@ -47,6 +47,7 @@ export default function TransactionFromAccount({
                   img: account?.urllogo,
                   label: account?.symbol,
                   value: index,
+                  disabled: account.active !== 1,
                 }))}
                 isVisibleLabel={true}
                 className="z-10"

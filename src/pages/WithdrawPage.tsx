@@ -78,13 +78,14 @@ export default function WithdrawPage() {
   } = withDrawForm;
 
   const { data: accounts } = useQuery({
-    queryKey: ['accounts', 50, 0, 'syombol', 'ASC'],
+    queryKey: ['accounts', 50, 0, 'syombol', 'ASC', 'includenonexistent'],
     queryFn: () =>
       getAccounts({
         limit: 50,
         offset: 0,
         orderKey: 'symbol',
         order: 'ASC',
+        includenonexistent: 1,
       }),
     select: (response) => response.data.list as Account[],
   });
