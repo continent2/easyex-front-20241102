@@ -7,14 +7,14 @@ import SnsKakaoImage from '@/assets/img/sns-kakao.png';
 import SnsNaverImage from '@/assets/img/sns-naver.png';
 import SnsTwitterImage from '@/assets/img/sns-twitter.png';
 
-import { getSocialSettings } from '@/lib/api/user';
+import { getUserSocialSettings } from '@/lib/api/user';
 import { UserSocialSetting } from '@/types/user';
 
 // import { env } from '@/env';
 
 export default function SnsLogin() {
   const { data: userSocialSettings } = useQuery({
-    queryFn: getSocialSettings,
+    queryFn: getUserSocialSettings,
     queryKey: ['socialSetting'],
     select: (response: any) => {
       return response.data.list as UserSocialSetting[];
