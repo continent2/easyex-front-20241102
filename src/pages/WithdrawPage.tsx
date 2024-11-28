@@ -3,7 +3,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useSearchParams } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import CryptoFiatToggleGroup from '@/components/common/CryptoFiatToggleGroup';
+import CryptoFiatToggleGroup from '@/components/transaction/CryptoFiatToggleGroup';
 import TransactionFromAccount from '@/components/transaction/TransactionFromAccount';
 import TransactionFromDisabled from '@/components/transaction/TransactionFromDisabled';
 import TransactionToCrypto from '@/components/transaction/TransactionToCrypto';
@@ -16,6 +16,7 @@ import ChangeImage from '@/assets/img/ico_change.png';
 import { getAccounts } from '@/lib/api/account';
 import { getBanks } from '@/lib/api/bank';
 import { getCryptos } from '@/lib/api/crypto';
+import { getUserWithdrawSettings } from '@/lib/api/user';
 import {
   getExchangeAllowedPairs,
   getExchangeRate,
@@ -31,6 +32,7 @@ import {
 import { Account } from '@/types/account';
 import { Bank } from '@/types/bank';
 import { Crypto } from '@/types/crypto';
+import { UserWithdrawSetting } from '@/types/user';
 import { ExChangeRate } from '@/types/withdraw';
 
 export type WithDrawFormValue = {
@@ -52,7 +54,44 @@ export default function WithdrawPage() {
   const { openModal } = useModal();
   const [searchParams] = useSearchParams();
   const fromSymbolParm = searchParams.get('fromSymbol');
-  const [toTypecf, setToTypecf] = useState<'C' | 'F'>('C');
+  const [toTypecf, setToTypecf] = useState<'C' | 'F' | undefined>('C');
+
+  const { data: userWithDrawSettings } = useQuery({
+    queryKey: ['userWithDrawSettings'],
+    queryFn: getUserWithdrawSettings,
+    select: (response: any) => response.data.list as UserWithdrawSetting[],
+  });
+
+  useEffect(() => {
+    if (!userWithDrawSettings) return;
+
+    const enabledCrypto =
+      userWithDrawSettings?.find(
+        (userWithDrawSetting) =>
+          userWithDrawSetting.subkey_ === 'ALLOW-TO-CRYPTO',
+      )?.value_ === '1';
+
+    const enabledFiat =
+      userWithDrawSettings?.find(
+        (userWithDrawSetting) =>
+          userWithDrawSetting.subkey_ === 'ALLOW-TO-FIAT',
+      )?.value_ === '1';
+
+    if (!enabledCrypto && !enabledFiat) {
+      setToTypecf(undefined);
+      return;
+    }
+
+    if (!enabledCrypto) {
+      setToTypecf('F');
+      return;
+    }
+
+    if (!enabledFiat) {
+      setToTypecf('C');
+      return;
+    }
+  }, [userWithDrawSettings, toTypecf]);
 
   const withDrawForm = useForm<WithDrawFormValue>({
     criteriaMode: 'all',
@@ -112,7 +151,7 @@ export default function WithdrawPage() {
     queryKey: ['banks'],
     queryFn: getBanks,
     select: (response) => response.data.list as Bank[],
-    enabled: toTypecf === 'F',
+    enabled: toTypecf === 'F' || toTypecf === undefined,
   });
 
   const { data: exchangeAllowedPairs } = useQuery({
@@ -397,6 +436,9 @@ export default function WithdrawPage() {
                     ) : (
                       <TransactionToFiatDisabled banks={banks} />
                     ))}
+                  {toTypecf === undefined && (
+                    <TransactionToFiatDisabled banks={banks} />
+                  )}
                 </div>
               </div>
               <div className="cont_box flexBox area02 ver_noList m-column">

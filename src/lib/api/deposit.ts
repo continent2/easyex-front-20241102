@@ -25,7 +25,7 @@ export const depositFiat = async (depositParams: {
 };
 
 // 입금 정책 조회
-export const getDepositPolicy = async (typecf: 'F' | 'C') => {
+export const getDepositPolicy = async (typecf?: 'F' | 'C') => {
   return defaultAxios.get(`/txs/policy/deposit/${typecf}`);
 };
 

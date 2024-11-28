@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
-import CryptoFiatToggleGroup from '@/components/common/CryptoFiatToggleGroup';
+import CryptoFiatToggleGroup from '@/components/deposit/CryptoFiatToggleGroup';
 import DepositCryptoForm from '@/components/deposit/DepositCryptoForm';
 import { DepositCryptoFormValue as depositCryptoFormValue } from '@/components/deposit/DepositCryptoForm/DepositCryptoForm';
 import DepositFiatForm from '@/components/deposit/DepositFiatForm';
@@ -18,9 +18,11 @@ import {
   getDepositInfo,
   getDepositPolicy,
 } from '@/lib/api/deposit';
+import { getUserDepositSettings } from '@/lib/api/user';
 import useModal from '@/lib/hooks/useModal';
 import { Bank } from '@/types/bank';
 import { AdminBankAccount, DepositInfo } from '@/types/deposit';
+import { UserDepositSetting } from '@/types/user';
 
 export default function DepositPage() {
   const [searchParams] = useSearchParams();
@@ -29,7 +31,44 @@ export default function DepositPage() {
     typecfParm === 'C' || typecfParm === 'F' ? typecfParm : 'C';
   const symbolParm = searchParams.get('symbol');
 
-  const [typecf, setTypecf] = useState<'C' | 'F'>(initTypecf);
+  const { data: userDepositSettings } = useQuery({
+    queryKey: ['userDepositSettings'],
+    queryFn: getUserDepositSettings,
+    select: (response: any) => response.data.list as UserDepositSetting[],
+  });
+
+  const [typecf, setTypecf] = useState<'C' | 'F' | undefined>(initTypecf);
+
+  useEffect(() => {
+    if (!userDepositSettings) return;
+
+    const enabledCrypto =
+      userDepositSettings?.find(
+        (userDepositSetting) => userDepositSetting.subkey_ === 'ALLOW-CRYPTO',
+      )?.value_ === '1';
+    // const enabledCrypto = false;
+
+    const enabledFiat =
+      userDepositSettings?.find(
+        (userDepositSetting) => userDepositSetting.subkey_ === 'ALLOW-FIAT',
+      )?.value_ === '1';
+    // const enabledFiat = true;
+
+    if (!enabledCrypto && !enabledFiat) {
+      setTypecf(undefined);
+      return;
+    }
+
+    if (!enabledCrypto && initTypecf === 'C') {
+      setTypecf('F');
+      return;
+    }
+
+    if (!enabledFiat && initTypecf === 'F') {
+      setTypecf('C');
+      return;
+    }
+  }, [userDepositSettings, initTypecf]);
 
   const { data: banks } = useQuery({
     queryKey: ['banks'],
@@ -49,6 +88,7 @@ export default function DepositPage() {
     queryKey: ['depositPolicy', typecf],
     queryFn: () => getDepositPolicy(typecf),
     select: (response) => response.data.policy as string,
+    enabled: !!typecf,
   });
 
   const depositFiatForm = useForm<depositFiatFormValue>({
