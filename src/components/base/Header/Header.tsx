@@ -52,9 +52,12 @@ export default function Header() {
 
             <div className="a_box">
               {user ? (
-                <a className="cursor-pointer" onClick={onLogout}>
-                  logout
-                </a>
+                <>
+                  <a href="/my/info">myinfo</a>
+                  <a className="cursor-pointer" onClick={onLogout}>
+                    logout
+                  </a>
+                </>
               ) : (
                 <>
                   <a href="/login">Login</a>
@@ -158,9 +161,12 @@ export default function Header() {
             </ul>
             <div className="a_box">
               {user ? (
-                <a className="cursor-pointer" onClick={onLogout}>
-                  logout
-                </a>
+                <>
+                  <a href="/my/info">myinfo</a>
+                  <a className="cursor-pointer" onClick={onLogout}>
+                    logout
+                  </a>
+                </>
               ) : (
                 <>
                   <a

@@ -44,3 +44,13 @@ export const getUserSocialSettings = async () => {
     return error;
   }
 };
+
+// 유저 정보 조회
+export const getUserInfo = async () => {
+  try {
+    const response = await defaultAxios.get(`/users/user/myinfo`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

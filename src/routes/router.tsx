@@ -6,6 +6,7 @@ import DepositPage from '@/pages/DepositPage';
 import HomePage from '@/pages/HomePage';
 import ActivityPage from '@/pages/my/ActivityPage';
 import BalancesPage from '@/pages/my/BalancesPage';
+import InfoPage from '@/pages/my/infoPage';
 import WithdrawPage from '@/pages/WithdrawPage';
 
 import AuthLayout from '@/components/layouts/AuthLayout';
@@ -25,6 +26,7 @@ const router = createBrowserRouter([
           { path: '/withdraw', element: <WithdrawPage /> },
           { path: '/my/activity', element: <ActivityPage /> },
           { path: '/my/balances', element: <BalancesPage /> },
+          { path: '/my/info', element: <InfoPage /> },
         ],
       },
     ],
