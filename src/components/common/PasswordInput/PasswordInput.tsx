@@ -20,7 +20,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, Props>(
         <input
           type={isShowPassword ? 'text' : 'password'}
           className={clsx(
-            'z-10 flex-1 border-0 outline-none text-[#4e4e4e]',
+            'z-10 w-[calc(100%-20px)] border-0 outline-none text-[#4e4e4e] min-w-0',
             className,
           )}
           ref={ref}
