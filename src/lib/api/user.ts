@@ -60,7 +60,7 @@ export const updateUserInfo = async ({
   phonenationalnumber,
   email,
   preferdepositcurrency,
-  preferwithdrawcurrecny,
+  preferwithdrawcurrency,
   username,
   pw,
 }: {
@@ -68,7 +68,7 @@ export const updateUserInfo = async ({
   phonenationalnumber?: string;
   email?: string;
   preferdepositcurrency?: string;
-  preferwithdrawcurrecny?: string;
+  preferwithdrawcurrency?: string;
   username?: string;
   pw?: string;
 }) => {
@@ -78,7 +78,7 @@ export const updateUserInfo = async ({
       phonenationalnumber,
       email,
       preferdepositcurrency,
-      preferwithdrawcurrecny,
+      preferwithdrawcurrency,
       username,
       pw,
     });

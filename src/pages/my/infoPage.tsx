@@ -4,6 +4,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { ErrorMessage } from '@hookform/error-message';
 import { Autocomplete, Box, TextField } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import CountryAndCurrency from '@workmate/country-and-currency';
 
 import PasswordInput from '@/components/common/PasswordInput';
 
@@ -27,6 +28,8 @@ export type infoFormValue = {
   phonecountrycode2letter: string;
   phonenationalnumber: string;
   phoneVerifyCode: string;
+  preferdepositcurrency: string | null;
+  preferwithdrawcurrency: string | null;
   username: string;
   pw: string;
 };
@@ -80,6 +83,8 @@ export default function InfoPage() {
     mode: 'all',
     defaultValues: {
       phonecountrycode2letter: 'KR',
+      preferdepositcurrency: 'KRW',
+      preferwithdrawcurrency: 'KRW',
     },
   });
 
@@ -103,6 +108,11 @@ export default function InfoPage() {
       setValue('phonenationalnumber', userInfo.myinfo.phonenationalnumber);
       setValue('email', userInfo.myinfo.email);
       setValue('username', userInfo.myinfo.username);
+      setValue('preferdepositcurrency', userInfo.myinfo.preferdepositcurrency);
+      setValue(
+        'preferwithdrawcurrency',
+        userInfo.myinfo.preferwithdrawcurrency,
+      );
     }
   }, [userInfo]);
 
@@ -273,12 +283,17 @@ export default function InfoPage() {
     phonenationalnumber,
     pw,
     username,
+    preferdepositcurrency,
+    preferwithdrawcurrency,
   }: infoFormValue) => {
+    console.log(preferdepositcurrency, preferwithdrawcurrency);
     if (
       isVerifyPhone ||
       isVerifyEmail ||
       getFieldState('username').isDirty ||
-      getFieldState('pw').isDirty
+      getFieldState('pw').isDirty ||
+      preferdepositcurrency ||
+      preferwithdrawcurrency
     ) {
       updateUserInfoMutate({
         phonecountrycode2letter: isVerifyPhone
@@ -289,17 +304,15 @@ export default function InfoPage() {
         username:
           getFieldState('username').isDirty && username ? username : undefined,
         pw: getFieldState('pw').isDirty && pw ? pw : undefined,
+        preferdepositcurrency:
+          preferdepositcurrency !== null ? preferdepositcurrency : undefined,
+        preferwithdrawcurrency:
+          preferwithdrawcurrency !== null ? preferwithdrawcurrency : undefined,
       });
-
-      console.log(
-        email,
-        phonecountrycode2letter,
-        phonenationalnumber,
-        pw,
-        username,
-      );
     }
   };
+
+  console.log(watch('preferdepositcurrency'));
 
   return (
     <>
@@ -329,7 +342,6 @@ export default function InfoPage() {
         </div>
         <div className="text-[#15a7a5]">Share this code with your friends</div>
       </div>
-
       <form onSubmit={handleSubmit(onSubmitInfoForm)}>
         <div className="cont_box_wrp join-cont-box-wrap join-inp-wrap border-[1px] border-solid border-[#ddd] rounded-[10px] flex flex-col p-[30px] !mt-[12px]">
           {/* phone */}
@@ -549,7 +561,6 @@ export default function InfoPage() {
               Request code
             </button>
           </div>
-
           <div className="join-inp-grp02 w-full">
             <div className="money_inp">
               <input
@@ -583,6 +594,228 @@ export default function InfoPage() {
             >
               Verify code
             </button>
+          </div>
+          {/* preferdeposit */}
+          <h3 className="self-start text-[#15a7a5] mb-[32px]">
+            Preferred deposit currency
+          </h3>
+          <div className="join-inp-grp01 w-full">
+            <Box
+              className="lg:mb-[15px] sm:!mb-0"
+              sx={{
+                width: '100%',
+                position: 'relative',
+                borderRadius: '10px',
+                border: '2.5px solid transparent',
+                background:
+                  'linear-gradient(90deg, #ecfbf8,#4cd4d2) border-box',
+                lineHeight: '56px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: '100%',
+                  background: 'white',
+                  borderRadius: '8px',
+                }}
+              >
+                {/* <Box
+                  className="label"
+                  sx={{
+                    position: 'absolute',
+                    paddingLeft: 2.2,
+                    marginRight: 1,
+                    color: '#25adab',
+                  }}
+                >
+                  PREFERRED DEPOSIT CURRENCY
+                </Box> */}
+                <Autocomplete
+                  onChange={(_, value) => {
+                    if (value)
+                      setValue('preferdepositcurrency', value.currency.code);
+                    else setValue('preferdepositcurrency', null);
+                  }}
+                  value={CountryAndCurrency.getCountries().find(
+                    (option) =>
+                      option.currency.code === watch('preferdepositcurrency'),
+                  )}
+                  componentsProps={{
+                    paper: {
+                      sx: {
+                        width: 'fit-content',
+                        position: 'absolute',
+                        left: 0,
+                        top: 3,
+                        '@media (max-width: 1024px)': {
+                          width: '100%',
+                        },
+                      },
+                    },
+                  }}
+                  id="country-select"
+                  sx={{
+                    width: '100%',
+                    '& fieldset': { border: 'none' },
+                  }}
+                  options={CountryAndCurrency.getCountries()}
+                  autoHighlight
+                  getOptionLabel={(option) => option.currency.code}
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                      key={option.name}
+                    >
+                      <img
+                        loading="lazy"
+                        width="20"
+                        src={option.flag}
+                        srcSet={option.flag}
+                        alt=""
+                      />
+                      {option.currency.code}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      {...register('preferdepositcurrency', {
+                        // required: 'Please enter country',
+                      })}
+                      inputProps={{
+                        ...params.inputProps,
+                        // style: { paddingLeft: '270px' },
+                      }}
+                    />
+                  )}
+                />
+              </Box>
+              <ErrorMessage
+                errors={errors}
+                name="preferdepositcurrency"
+                render={({ message }) => (
+                  <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                    {message}
+                  </p>
+                )}
+              />
+            </Box>
+          </div>
+          {/* preferwithdraw */}
+          <h3 className="self-start text-[#15a7a5] mb-[32px]">
+            Preferred withdraw currency
+          </h3>
+          <div className="join-inp-grp01 w-full">
+            <Box
+              className="lg:mb-[15px] sm:!mb-0"
+              sx={{
+                width: '100%',
+                position: 'relative',
+                borderRadius: '10px',
+                border: '2.5px solid transparent',
+                background:
+                  'linear-gradient(90deg, #ecfbf8,#4cd4d2) border-box',
+                lineHeight: '56px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  width: '100%',
+                  background: 'white',
+                  borderRadius: '8px',
+                }}
+              >
+                {/* <Box
+                  className="label"
+                  sx={{
+                    position: 'absolute',
+                    paddingLeft: 2.2,
+                    marginRight: 1,
+                    color: '#25adab',
+                  }}
+                >
+                  PREFERRED WITHDRAW CURRENCY
+                </Box> */}
+                <Autocomplete
+                  onChange={(_, value) => {
+                    if (value)
+                      setValue('preferwithdrawcurrency', value.currency.code);
+                    else setValue('preferwithdrawcurrency', null);
+                  }}
+                  value={CountryAndCurrency.getCountries().find(
+                    (option) =>
+                      option.currency.code === watch('preferwithdrawcurrency'),
+                  )}
+                  componentsProps={{
+                    paper: {
+                      sx: {
+                        width: 'fit-content',
+                        position: 'absolute',
+                        left: 0,
+                        top: 3,
+                        '@media (max-width: 1024px)': {
+                          width: '100%',
+                        },
+                      },
+                    },
+                  }}
+                  id="country-select"
+                  sx={{
+                    width: '100%',
+                    '& fieldset': { border: 'none' },
+                  }}
+                  options={CountryAndCurrency.getCountries()}
+                  autoHighlight
+                  getOptionLabel={(option) => option.currency.code}
+                  renderOption={(props, option) => (
+                    <Box
+                      component="li"
+                      sx={{ '& > img': { mr: 2, flexShrink: 0 } }}
+                      {...props}
+                      key={option.name}
+                    >
+                      <img
+                        loading="lazy"
+                        width="20"
+                        src={option.flag}
+                        srcSet={option.flag}
+                        alt=""
+                      />
+                      {option.currency.code}
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      {...register('preferwithdrawcurrency', {
+                        // required: 'Please enter country',
+                      })}
+                      inputProps={{
+                        ...params.inputProps,
+                        // style: { paddingLeft: '298px' },
+                      }}
+                    />
+                  )}
+                />
+              </Box>
+              <ErrorMessage
+                errors={errors}
+                name="preferwithdrawcurrency"
+                render={({ message }) => (
+                  <p className="absolute bottom-[-25px] text-red-500 leading-[20px] text-[13px] left-0">
+                    {message}
+                  </p>
+                )}
+              />
+            </Box>
           </div>
           {/* name */}
           <div className="money_inp">
