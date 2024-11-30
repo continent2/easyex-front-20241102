@@ -81,6 +81,9 @@ export default function Header() {
               <a href="/withdraw">Withdraw</a>
             </li>
             <li>
+              <a href="/exchange">Exchange</a>
+            </li>
+            <li>
               <a href="/my/activity">Activity</a>
             </li>
             <li>
@@ -132,6 +135,18 @@ export default function Header() {
                   href="/withdraw"
                 >
                   Withdraw
+                </a>
+              </li>
+              <li>
+                <a
+                  className={clsx(
+                    location.pathname === '/exchange'
+                      ? '!text-[19px] !text-black'
+                      : ' ',
+                  )}
+                  href="/exchange"
+                >
+                  Exchange
                 </a>
               </li>
               <li>

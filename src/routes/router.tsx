@@ -8,6 +8,7 @@ import ActivityPage from '@/pages/my/ActivityPage';
 import BalancesPage from '@/pages/my/BalancesPage';
 import InfoPage from '@/pages/my/infoPage';
 import WithdrawPage from '@/pages/WithdrawPage';
+import ExchangePage from '@/pages/ExchangePage';
 
 import AuthLayout from '@/components/layouts/AuthLayout';
 import DefaultLayout from '@/components/layouts/DefaultLayout';
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
           { path: '/my/activity', element: <ActivityPage /> },
           { path: '/my/balances', element: <BalancesPage /> },
           { path: '/my/info', element: <InfoPage /> },
+          { path: '/exchange', element: <ExchangePage /> },
         ],
       },
     ],
