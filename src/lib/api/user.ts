@@ -54,3 +54,36 @@ export const getUserInfo = async () => {
     return error;
   }
 };
+
+export const updateUserInfo = async ({
+  phonecountrycode2letter,
+  phonenationalnumber,
+  email,
+  preferdepositcurrency,
+  preferwithdrawcurrecny,
+  username,
+  pw,
+}: {
+  phonecountrycode2letter?: string;
+  phonenationalnumber?: string;
+  email?: string;
+  preferdepositcurrency?: string;
+  preferwithdrawcurrecny?: string;
+  username?: string;
+  pw?: string;
+}) => {
+  try {
+    const response = await defaultAxios.put(`/users/user/myinfo`, {
+      phonecountrycode2letter,
+      phonenationalnumber,
+      email,
+      preferdepositcurrency,
+      preferwithdrawcurrecny,
+      username,
+      pw,
+    });
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
