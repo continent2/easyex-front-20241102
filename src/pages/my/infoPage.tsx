@@ -286,7 +286,6 @@ export default function InfoPage() {
     preferdepositcurrency,
     preferwithdrawcurrency,
   }: infoFormValue) => {
-    console.log(preferdepositcurrency, preferwithdrawcurrency);
     if (
       isVerifyPhone ||
       isVerifyEmail ||
@@ -311,8 +310,6 @@ export default function InfoPage() {
       });
     }
   };
-
-  console.log(watch('preferdepositcurrency'));
 
   return (
     <>
@@ -457,7 +454,7 @@ export default function InfoPage() {
               />
             </Box>
             <div className="money_inp">
-              <i className="label">Phone number</i>
+              <i className="label">Phone #</i>
               <input
                 type="text"
                 className="inp_style"
