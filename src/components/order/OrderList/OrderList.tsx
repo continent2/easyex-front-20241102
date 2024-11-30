@@ -13,6 +13,7 @@ type Props = {
   orders?: Order[];
   currentPage: number;
   totalPages: number;
+  totalCount?: number;
   onChangePage: (pageNumber: number) => void;
   onDeleteOrder: (order: Order) => void;
 };
@@ -21,6 +22,7 @@ export default function OrderList({
   orders,
   currentPage,
   totalPages,
+  totalCount,
   onChangePage,
   onDeleteOrder,
 }: Props) {
@@ -97,6 +99,9 @@ export default function OrderList({
           </div>
         </div>
       </div> */}
+      <div className="mb-[15px] lg:w-[90%] lg:mx-auto">
+        Total entries: {totalCount}
+      </div>
       <div className="cont_box_wrp tbl-cont-box-wrap ">
         <div className="tbl-wrap">
           <table className="tbl min-h-[682px]">

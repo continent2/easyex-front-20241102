@@ -92,6 +92,7 @@ export default function ActivityPage() {
       <OrderList
         orders={orders}
         currentPage={currentPage}
+        totalCount={orderPageNation?.payload.count}
         totalPages={totalPages}
         onChangePage={onChangePage}
         onDeleteOrder={onDeleteOrder}

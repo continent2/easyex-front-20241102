@@ -76,7 +76,7 @@ export default function AccountList({
         </div> */}
       </div>
       <div className="mb-[15px] lg:w-[90%] lg:mx-auto">
-        Total currency: {totalCount}
+        Total entries: {totalCount}
       </div>
       <div className="cont_box_wrp tbl-cont-box-wrap">
         <div className="tbl-wrap">
