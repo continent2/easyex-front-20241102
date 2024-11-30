@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { QRCodeSVG } from 'qrcode.react';
 import { ErrorMessage } from '@hookform/error-message';
-import { Autocomplete, Box, TextField } from '@mui/material';
+import { Autocomplete, Box, InputAdornment, TextField } from '@mui/material';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import CountryAndCurrency from '@workmate/country-and-currency';
 
@@ -107,7 +107,6 @@ export default function InfoPage() {
       );
       setValue('phonenationalnumber', userInfo.myinfo.phonenationalnumber);
       setValue('email', userInfo.myinfo.email);
-      setValue('username', userInfo.myinfo.username);
       setValue('preferdepositcurrency', userInfo.myinfo.preferdepositcurrency);
       setValue(
         'preferwithdrawcurrency',
@@ -678,18 +677,33 @@ export default function InfoPage() {
                       {option.currency.code}
                     </Box>
                   )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      {...register('preferdepositcurrency', {
-                        // required: 'Please enter country',
-                      })}
-                      inputProps={{
-                        ...params.inputProps,
-                        // style: { paddingLeft: '270px' },
-                      }}
-                    />
-                  )}
+                  renderInput={(params) => {
+                    const selectedOption =
+                      CountryAndCurrency.getCountries().find(
+                        (option) =>
+                          option.currency.code ===
+                          watch('preferdepositcurrency'),
+                      );
+
+                    return (
+                      <TextField
+                        {...params}
+                        {...register('preferdepositcurrency')}
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: selectedOption ? (
+                            <InputAdornment position="start">
+                              <img
+                                src={selectedOption.flag}
+                                alt=""
+                                width="20"
+                              />
+                            </InputAdornment>
+                          ) : null,
+                        }}
+                      />
+                    );
+                  }}
                 />
               </Box>
               <ErrorMessage
@@ -789,18 +803,33 @@ export default function InfoPage() {
                       {option.currency.code}
                     </Box>
                   )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      {...register('preferwithdrawcurrency', {
-                        // required: 'Please enter country',
-                      })}
-                      inputProps={{
-                        ...params.inputProps,
-                        // style: { paddingLeft: '298px' },
-                      }}
-                    />
-                  )}
+                  renderInput={(params) => {
+                    const selectedOption =
+                      CountryAndCurrency.getCountries().find(
+                        (option) =>
+                          option.currency.code ===
+                          watch('preferwithdrawcurrency'),
+                      );
+
+                    return (
+                      <TextField
+                        {...params}
+                        {...register('preferwithdrawcurrency')}
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: selectedOption ? (
+                            <InputAdornment position="start">
+                              <img
+                                src={selectedOption.flag}
+                                alt=""
+                                width="20"
+                              />
+                            </InputAdornment>
+                          ) : null,
+                        }}
+                      />
+                    );
+                  }}
                 />
               </Box>
               <ErrorMessage
@@ -819,12 +848,13 @@ export default function InfoPage() {
             <i className="label">Name</i>
             <input
               className="inp_style"
+              autoComplete="off"
+              placeholder={userInfo?.myinfo.username}
               {...register('username', {
                 pattern: {
                   value: /^.{7,40}$/,
                   message: 'username must be between 7 and 40 characters',
                 },
-                required: 'Please username',
               })}
             />
           </div>
@@ -847,6 +877,7 @@ export default function InfoPage() {
           <div className="money_inp password_inp mt-[35px]">
             <i className="label">Password</i>
             <PasswordInput
+              autoComplete="new-password"
               {...register('pw', {
                 // required: 'Please Enter password',
                 pattern: {

@@ -86,6 +86,9 @@ export default function Header() {
             <li>
               <a href="/my/balances">Balances</a>
             </li>
+            <li>
+              <a href="/my/info">My info</a>
+            </li>
           </ul>
         </div>
         <div
