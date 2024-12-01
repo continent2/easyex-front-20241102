@@ -1,4 +1,5 @@
 import { useFormContext } from 'react-hook-form';
+import clsx from 'clsx';
 import { ErrorMessage } from '@hookform/error-message';
 import { Autocomplete, Box, TextField } from '@mui/material';
 
@@ -197,20 +198,50 @@ export default function JoinForm({
                       {option.label}
                     </Box>
                   )}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      {...register('phonecountrycode2letter', {
-                        required: 'Please enter country code',
-                      })}
-                      disabled={isVerifyPhone}
-                      inputProps={{
-                        ...params.inputProps,
-
-                        style: { paddingLeft: '90px' },
-                      }}
-                    />
-                  )}
+                  renderInput={(params) => {
+                    const selectedCountry = countries.find(
+                      (country) =>
+                        country.code === watch('phonecountrycode2letter'),
+                    );
+                    return (
+                      <TextField
+                        {...params}
+                        {...register('phonecountrycode2letter', {
+                          required: isVerifyPhone
+                            ? false
+                            : 'Please enter country code',
+                        })}
+                        InputProps={{
+                          ...params.InputProps,
+                          startAdornment: selectedCountry && (
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                pl: 10,
+                              }}
+                            >
+                              <img
+                                loading="lazy"
+                                width="20"
+                                src={`https://flagcdn.com/w20/${selectedCountry.code.toLowerCase()}.png`}
+                                srcSet={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png 2x`}
+                                alt=""
+                              />
+                            </Box>
+                          ),
+                        }}
+                        inputProps={{
+                          ...params.inputProps,
+                          className: clsx('', params.inputProps.className),
+                          style: {
+                            paddingLeft: selectedCountry ? '0px' : '80px',
+                          },
+                        }}
+                        disabled={isVerifyPhone}
+                      />
+                    );
+                  }}
                 />
               </Box>
               <ErrorMessage
@@ -224,13 +255,13 @@ export default function JoinForm({
               />
             </Box>
             <div className="money_inp">
-              <i className="label">Phone number</i>
+              <i className="label">Phone #</i>
               <input
                 type="text"
                 className="inp_style"
                 readOnly={isVerifyPhone}
                 disabled={isVerifyPhone}
-                placeholder="NUMBERS ONLY"
+                placeholder="Numbers only"
                 onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                   event.target.value = event.target.value.replace(
                     /[^0-9]/g,

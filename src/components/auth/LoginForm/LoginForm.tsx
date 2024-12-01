@@ -264,22 +264,50 @@ export default function LoginForm({
                         {option.label}
                       </Box>
                     )}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        {...register('phonecountrycode2letter', {
-                          required: isInputEmail
-                            ? false
-                            : 'Please enter country code',
-                        })}
-                        inputProps={{
-                          ...params.inputProps,
-                          className: clsx('', params.inputProps.className),
-                          style: { paddingLeft: '90px' },
-                        }}
-                        disabled={isInputEmail}
-                      />
-                    )}
+                    renderInput={(params) => {
+                      const selectedCountry = countries.find(
+                        (country) =>
+                          country.code === watch('phonecountrycode2letter'),
+                      );
+                      return (
+                        <TextField
+                          {...params}
+                          {...register('phonecountrycode2letter', {
+                            required: isInputEmail
+                              ? false
+                              : 'Please enter country code',
+                          })}
+                          InputProps={{
+                            ...params.InputProps,
+                            startAdornment: selectedCountry && (
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  pl: 10,
+                                }}
+                              >
+                                <img
+                                  loading="lazy"
+                                  width="20"
+                                  src={`https://flagcdn.com/w20/${selectedCountry.code.toLowerCase()}.png`}
+                                  srcSet={`https://flagcdn.com/w40/${selectedCountry.code.toLowerCase()}.png 2x`}
+                                  alt=""
+                                />
+                              </Box>
+                            ),
+                          }}
+                          inputProps={{
+                            ...params.inputProps,
+                            className: clsx('', params.inputProps.className),
+                            style: {
+                              paddingLeft: selectedCountry ? '0px' : '80px',
+                            },
+                          }}
+                          disabled={isInputEmail}
+                        />
+                      );
+                    }}
                   />
                 </Box>
                 <ErrorMessage
@@ -293,12 +321,12 @@ export default function LoginForm({
                 />
               </Box>
               <div className="money_inp" aria-disabled={isInputEmail}>
-                <i className="label mr-[15px]">Phone number</i>
+                <i className="label mr-[15px]">Phone #</i>
                 <input
                   type="text"
                   className="inp_style disabled:bg-white"
                   disabled={isInputEmail}
-                  placeholder="NUMBERS ONLY"
+                  placeholder="Numbers only"
                   onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                     event.target.value = event.target.value.replace(
                       /[^0-9]/g,

@@ -459,7 +459,7 @@ export default function InfoPage() {
                 className="inp_style"
                 readOnly={isVerifyPhone}
                 disabled={isVerifyPhone}
-                placeholder="NUMBERS ONLY"
+                placeholder="Numbers only"
                 onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                   event.target.value = event.target.value.replace(
                     /[^0-9]/g,
