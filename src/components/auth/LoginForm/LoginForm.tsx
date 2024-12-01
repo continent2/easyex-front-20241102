@@ -270,7 +270,7 @@ export default function LoginForm({
                         {...register('phonecountrycode2letter', {
                           required: isInputEmail
                             ? false
-                            : 'Please enter country',
+                            : 'Please enter country code',
                         })}
                         inputProps={{
                           ...params.inputProps,

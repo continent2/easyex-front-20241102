@@ -138,7 +138,7 @@ export default function InfoPage() {
 
     if (!phonecountrycode2letter) {
       setError('phonecountrycode2letter', {
-        message: 'Please enter country',
+        message: 'Please enter country code',
       });
       return;
     }
@@ -177,7 +177,7 @@ export default function InfoPage() {
 
     if (!phonecountrycode2letter) {
       setError('phonecountrycode2letter', {
-        message: 'Please enter country',
+        message: 'Please enter country code',
       });
       return;
     }

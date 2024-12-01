@@ -201,7 +201,7 @@ export default function JoinForm({
                     <TextField
                       {...params}
                       {...register('phonecountrycode2letter', {
-                        required: 'Please enter country',
+                        required: 'Please enter country code',
                       })}
                       disabled={isVerifyPhone}
                       inputProps={{
