@@ -137,19 +137,22 @@ export default function DepositCryptoForm({
                   })}
                 ></textarea>
               </div>
-              <ErrorMessage
-                errors={errors}
-                name="fromAccount"
-                render={({ messages }) =>
-                  messages &&
-                  Object.entries(messages).map(([type, message]) => (
-                    <p className="red_alert" key={type}>
-                      {message}
-                    </p>
-                  ))
-                }
-              />
             </div>
+            <ErrorMessage
+              errors={errors}
+              name="fromAccount"
+              render={({ messages }) =>
+                messages &&
+                Object.entries(messages).map(([type, message]) => (
+                  <p
+                    className="text-red-500 leading-[20px] text-[13px] text-right"
+                    key={type}
+                  >
+                    {message}
+                  </p>
+                ))
+              }
+            />
           </div>
           <span className="exchange pcVer">
             <img src={ChangeImage} alt="" />
@@ -258,21 +261,24 @@ export default function DepositCryptoForm({
               />
               <span>{activeCrypto?.symbol}</span>
             </div>
+            <div className="mt-4">
+              MIN: {activeCrypto?.mindeposit} MAX: {activeCrypto?.maxdeposit}
+            </div>
             <ErrorMessage
               errors={errors}
               name="fromAmount"
               render={({ messages }) =>
                 messages &&
                 Object.entries(messages).map(([type, message]) => (
-                  <p className="red_alert" key={type}>
+                  <p
+                    className="text-red-500 leading-[20px] text-[13px] text-right"
+                    key={type}
+                  >
                     {message}
                   </p>
                 ))
               }
             />
-            <div className="mt-4">
-              MIN: {activeCrypto?.mindeposit} MAX: {activeCrypto?.maxdeposit}
-            </div>
           </div>
         </div>
 
@@ -312,19 +318,22 @@ export default function DepositCryptoForm({
                 })}
               />
             </div>
-            <ErrorMessage
-              errors={errors}
-              name="fromTxhash"
-              render={({ messages }) =>
-                messages &&
-                Object.entries(messages).map(([type, message]) => (
-                  <p className="red_alert" key={type}>
-                    {message}
-                  </p>
-                ))
-              }
-            />
           </div>
+          <ErrorMessage
+            errors={errors}
+            name="fromTxhash"
+            render={({ messages }) =>
+              messages &&
+              Object.entries(messages).map(([type, message]) => (
+                <p
+                  className="text-red-500 leading-[20px] text-[13px] text-right"
+                  key={type}
+                >
+                  {message}
+                </p>
+              ))
+            }
+          />
         </div>
         <div className="cont_box flexBox area02 ver_noList m-column mt-3 !hidden lg:!block">
           <div className="inp_tit" style={{ width: '40%' }}>

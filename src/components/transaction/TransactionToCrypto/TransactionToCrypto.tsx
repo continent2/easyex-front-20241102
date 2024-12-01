@@ -63,12 +63,16 @@ export default function TransactionToCrypto({ cryptos }: Props) {
               },
             })}
           ></textarea>
-          <ErrorMessage
-            errors={errors}
-            name="to.cryptoAccount"
-            render={({ message }) => <p className="red_alert">{message}</p>}
-          />
         </div>
+        <ErrorMessage
+          errors={errors}
+          name="to.cryptoAccount"
+          render={({ message }) => (
+            <p className="text-red-500 leading-[20px] text-[13px] text-right">
+              {message}
+            </p>
+          )}
+        />
       </div>
       <div className="cont_box">
         <div className="">
