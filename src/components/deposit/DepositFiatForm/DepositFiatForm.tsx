@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 
@@ -32,6 +33,7 @@ export default function DepositFiatForm({
     watch,
     register,
     handleSubmit,
+    setValue,
     formState: { errors, isValid },
   } = useFormContext<DepositFiatFormValue>();
 
@@ -40,6 +42,10 @@ export default function DepositFiatForm({
 
   const ActiveAdminBankAccountIndex = watch('activeAdminAccountIndex');
   const activeAdminBankAccout = adminBankAccounts?.[activeBankIndex];
+
+  useEffect(() => {
+    setValue('fromAmount', '');
+  }, [activeBank]);
 
   return (
     <>
@@ -83,7 +89,7 @@ export default function DepositFiatForm({
                       })}
                     />
                   </div>
-                  <div className="money_inp in_alert">
+                  <div className="money_inp">
                     <i className="label">Account</i>
                     <input
                       type="text"
@@ -96,22 +102,39 @@ export default function DepositFiatForm({
                         },
                       })}
                     />
-                    <ErrorMessage
-                      errors={errors}
-                      name="fromAccount"
-                      render={({ messages }) =>
-                        messages &&
-                        Object.entries(messages).map(([type, message]) => (
-                          <p className="red_alert" key={type}>
-                            {message}
-                          </p>
-                        ))
-                      }
-                    />
                   </div>
-                  <div className="money_inp in_alert">
+                  <ErrorMessage
+                    errors={errors}
+                    name="fromAccount"
+                    render={({ messages }) =>
+                      messages &&
+                      Object.entries(messages).map(([type, message]) => (
+                        <p
+                          className="text-red-500 leading-[20px] text-[13px] text-left"
+                          key={type}
+                        >
+                          {message}
+                        </p>
+                      ))
+                    }
+                  />
+                  <div className="money_inp">
                     <i className="won"></i>
                     <input
+                      onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
+                        const value = (event.target.value = event.target.value
+                          .replace(/[^0-9.]/g, '')
+                          .replace(/(\..*?)\./g, '$1')
+                          .replace(/^\./, ''));
+
+                        const numericValue = parseFloat(value);
+                        if (!isNaN(numericValue)) {
+                          if (numericValue > Number(activeBank?.maxdeposit)) {
+                            event.target.value =
+                              activeBank?.maxdeposit as string;
+                          }
+                        }
+                      }}
                       type="text"
                       className="inp_style"
                       {...register('fromAmount', {
@@ -120,22 +143,41 @@ export default function DepositFiatForm({
                           value: /^[1-9][0-9]*$/,
                           message: 'Invalid amount.',
                         },
+                        validate: (fromAmount) => {
+                          if (
+                            Number(fromAmount) <
+                              Number(activeBank?.mindeposit) ||
+                            Number(fromAmount) > Number(activeBank?.maxdeposit)
+                          ) {
+                            return `Out of bounds`;
+                          }
+                        },
                       })}
                     />
                     <span>KRW</span>
-                    <ErrorMessage
-                      errors={errors}
-                      name="fromAmount"
-                      render={({ messages }) =>
-                        messages &&
-                        Object.entries(messages).map(([type, message]) => (
-                          <p className="red_alert" key={type}>
-                            {message}
-                          </p>
-                        ))
-                      }
-                    />
                   </div>
+
+                  {activeBank && (
+                    <div className="mt-4">
+                      MIN: {activeBank?.mindeposit} MAX:{' '}
+                      {activeBank?.maxdeposit}
+                    </div>
+                  )}
+                  <ErrorMessage
+                    errors={errors}
+                    name="fromAmount"
+                    render={({ messages }) =>
+                      messages &&
+                      Object.entries(messages).map(([type, message]) => (
+                        <p
+                          className="text-red-500 leading-[20px] text-[13px] text-left"
+                          key={type}
+                        >
+                          {message}
+                        </p>
+                      ))
+                    }
+                  />
                 </div>
               </div>
               <span className="exchange pcVer">

@@ -145,7 +145,7 @@ export default function DepositCryptoForm({
                 messages &&
                 Object.entries(messages).map(([type, message]) => (
                   <p
-                    className="text-red-500 leading-[20px] text-[13px] text-right"
+                    className="text-red-500 leading-[20px] text-[13px] text-left"
                     key={type}
                   >
                     {message}
@@ -261,7 +261,7 @@ export default function DepositCryptoForm({
               />
               <span>{activeCrypto?.symbol}</span>
             </div>
-            <div className="mt-4">
+            <div className="mt-4 text-left">
               MIN: {activeCrypto?.mindeposit} MAX: {activeCrypto?.maxdeposit}
             </div>
             <ErrorMessage
@@ -271,7 +271,7 @@ export default function DepositCryptoForm({
                 messages &&
                 Object.entries(messages).map(([type, message]) => (
                   <p
-                    className="text-red-500 leading-[20px] text-[13px] text-right"
+                    className="text-red-500 leading-[20px] text-[13px] text-left"
                     key={type}
                   >
                     {message}
@@ -318,22 +318,22 @@ export default function DepositCryptoForm({
                 })}
               />
             </div>
+            <ErrorMessage
+              errors={errors}
+              name="fromTxhash"
+              render={({ messages }) =>
+                messages &&
+                Object.entries(messages).map(([type, message]) => (
+                  <p
+                    className="text-red-500 leading-[20px] text-[13px] text-left"
+                    key={type}
+                  >
+                    {message}
+                  </p>
+                ))
+              }
+            />
           </div>
-          <ErrorMessage
-            errors={errors}
-            name="fromTxhash"
-            render={({ messages }) =>
-              messages &&
-              Object.entries(messages).map(([type, message]) => (
-                <p
-                  className="text-red-500 leading-[20px] text-[13px] text-right"
-                  key={type}
-                >
-                  {message}
-                </p>
-              ))
-            }
-          />
         </div>
         <div className="cont_box flexBox area02 ver_noList m-column mt-3 !hidden lg:!block">
           <div className="inp_tit" style={{ width: '40%' }}>

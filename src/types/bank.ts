@@ -13,4 +13,6 @@ export type Bank = {
   active: number;
   code: string;
   primarycurrency: string;
+  mindeposit: string;
+  maxdeposit: string;
 };
