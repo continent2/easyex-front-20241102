@@ -105,8 +105,8 @@ export default function InfoPage() {
         'phonecountrycode2letter',
         userInfo.myinfo.phonecountrycode2letter,
       );
-      setValue('phonenationalnumber', userInfo.myinfo.phonenationalnumber);
-      setValue('email', userInfo.myinfo.email);
+      // setValue('phonenationalnumber', userInfo.myinfo.phonenationalnumber);
+      // setValue('email', userInfo.myinfo.email);
       setValue('preferdepositcurrency', userInfo.myinfo.preferdepositcurrency);
       setValue(
         'preferwithdrawcurrency',
@@ -459,7 +459,8 @@ export default function InfoPage() {
                 className="inp_style"
                 readOnly={isVerifyPhone}
                 disabled={isVerifyPhone}
-                placeholder="Numbers only"
+                placeholder={userInfo?.myinfo.phonenationalnumber}
+                // placeholder="Numbers only"
                 onInput={(event: React.ChangeEvent<HTMLInputElement>) => {
                   event.target.value = event.target.value.replace(
                     /[^0-9]/g,
@@ -530,6 +531,7 @@ export default function InfoPage() {
               <input
                 readOnly={isVerifyEmail}
                 disabled={isVerifyEmail}
+                placeholder={userInfo?.myinfo.email}
                 className="inp_style"
                 {...register('email', {
                   // required: 'Please Enter email',
